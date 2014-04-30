@@ -30,7 +30,7 @@ import com.giovanetti.support.BatchProperties;
 public class ExternalConfigurationTest {
 
 	@ClassRule
-	public static BatchProperties batchProperties = new BatchProperties();
+	public final static BatchProperties batchProperties = new BatchProperties();
 
 	@BeforeClass
 	public static void setupClass() throws IOException {

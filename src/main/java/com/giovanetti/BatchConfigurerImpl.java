@@ -27,11 +27,11 @@ public class BatchConfigurerImpl implements BatchConfigurer {
 		JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
 		factory.setDataSource(dataSource);
 		factory.setTransactionManager(getTransactionManager());
-		JobRepository jobRepository = null;
+		JobRepository jobRepository;
 		try {
-			factory.afterPropertiesSet();
-			jobRepository = (JobRepository) factory.getObject();
-		} catch (Exception e) {
+            factory.afterPropertiesSet();
+            jobRepository = (JobRepository) factory.getObject();
+        } catch (Exception e) {
 			// TODO : pas mieux ?
 			throw new IllegalStateException(e);
 		}

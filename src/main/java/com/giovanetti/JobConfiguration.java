@@ -1,8 +1,6 @@
 package com.giovanetti;
 
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
+import com.giovanetti.annotations.FunctionalDataSource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.Step;
@@ -23,10 +21,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 
-import com.giovanetti.annotations.FunctionalDataSource;
+import javax.inject.Inject;
+import javax.sql.DataSource;
 
 //TODO : configure logs : switch logback ?
-//TODO : push to github
 //TODO : re package
 //TODO : javadoc, changes.xml
 //TODO : checkstyle PMD
@@ -35,71 +33,72 @@ import com.giovanetti.annotations.FunctionalDataSource;
 
 @Configuration
 @EnableBatchProcessing
-@Import({ ExternalConfiguration.class, BatchConfigurerImpl.class })
+@Import({ExternalConfiguration.class, BatchConfigurerImpl.class})
 public class JobConfiguration {
 
-	public final static String JOB_NAME = "extractionJob";
-	public final static String STEP_NAME = "jdbcToFileStep";
+    public final static String JOB_NAME = "extractionJob";
+    public final static String STEP_NAME = "jdbcToFileStep";
 
-	public final static String OUTPUT_FILE_PARAMETER = "output.file.path";
+    public final static String OUTPUT_FILE_PARAMETER = "output.file.path";
 
-	@Inject
-	private Environment environment;
+    @Inject
+    private Environment environment;
 
-	@Inject
-	private JobBuilderFactory jobBuilders;
+    @Inject
+    private JobBuilderFactory jobBuilders;
 
-	@Inject
-	private StepBuilderFactory stepBuilders;
+    @Inject
+    private StepBuilderFactory stepBuilders;
 
-	@Inject
-	@FunctionalDataSource
-	private DataSource dataSource;
+    @Inject
+    @FunctionalDataSource
+    private DataSource dataSource;
 
-	@Bean
-	public JobParametersValidator jobParametersValidator() {
-		return new DefaultJobParametersValidator(
-				new String[] { OUTPUT_FILE_PARAMETER }, new String[] {});
-	}
+    @Bean
+    JobParametersValidator jobParametersValidator() {
+        return new DefaultJobParametersValidator(
+                new String[]{OUTPUT_FILE_PARAMETER}, new String[]{});
+    }
 
-	@Bean(name = JOB_NAME)
-	public Job job() {
-		return jobBuilders.get(JOB_NAME).validator(jobParametersValidator())
-				.start(step()).build();
-	}
+    @Bean(name = JOB_NAME)
+    Job job() {
+        return jobBuilders.get(JOB_NAME).validator(jobParametersValidator())
+                .start(step()).build();
+    }
 
-	@Bean(name = STEP_NAME)
-	public Step step() {
-		return stepBuilders
-				.get(STEP_NAME)
-				.transactionManager(new ResourcelessTransactionManager())
-				.<String, String> chunk(
-						Integer.parseInt(environment
-								.getProperty(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
-										.toString()))).reader(reader())
-				.writer(writer(null)).build();
-	}
+    @Bean(name = STEP_NAME)
+    Step step() {
+        return stepBuilders
+                .get(STEP_NAME)
+                .transactionManager(new ResourcelessTransactionManager())
+                .<String, String>chunk(
+                        Integer.parseInt(environment
+                                .getProperty(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
+                                        .toString()))
+                ).reader(reader())
+                .writer(writer(null)).build();
+    }
 
-	@Bean
-	public JdbcCursorItemReader<String> reader() {
-		JdbcCursorItemReader<String> jdbcCursorItemReader = new JdbcCursorItemReader<String>();
-		jdbcCursorItemReader.setDataSource(dataSource);
-		// TODO extract all columns => bean User
-		jdbcCursorItemReader.setSql("select ID from USER");
-		jdbcCursorItemReader.setRowMapper(new SingleColumnRowMapper<String>());
-		return jdbcCursorItemReader;
-	}
+    @Bean
+    JdbcCursorItemReader<String> reader() {
+        JdbcCursorItemReader<String> jdbcCursorItemReader = new JdbcCursorItemReader<>();
+        jdbcCursorItemReader.setDataSource(dataSource);
+        // TODO extract all columns => bean User
+        jdbcCursorItemReader.setSql("select ID from USER");
+        jdbcCursorItemReader.setRowMapper(new SingleColumnRowMapper<String>());
+        return jdbcCursorItemReader;
+    }
 
-	@Bean
-	@StepScope
-	public FlatFileItemWriter<String> writer(@Value("#{jobParameters['"
-			+ OUTPUT_FILE_PARAMETER + "']}") String path) {
-		FlatFileItemWriter<String> flatFileItemWriter = new FlatFileItemWriter<String>();
-		DelimitedLineAggregator<String> lineAggregator = new DelimitedLineAggregator<String>();
-		lineAggregator.setDelimiter(",");
-		flatFileItemWriter.setLineAggregator(lineAggregator);
-		flatFileItemWriter.setResource(new FileSystemResource(path));
-		return flatFileItemWriter;
-	}
+    @Bean
+    @StepScope
+    FlatFileItemWriter<String> writer(@Value("#{jobParameters['"
+            + OUTPUT_FILE_PARAMETER + "']}") String path) {
+        FlatFileItemWriter<String> flatFileItemWriter = new FlatFileItemWriter<>();
+        DelimitedLineAggregator<String> lineAggregator = new DelimitedLineAggregator<>();
+        lineAggregator.setDelimiter(",");
+        flatFileItemWriter.setLineAggregator(lineAggregator);
+        flatFileItemWriter.setResource(new FileSystemResource(path));
+        return flatFileItemWriter;
+    }
 
 }

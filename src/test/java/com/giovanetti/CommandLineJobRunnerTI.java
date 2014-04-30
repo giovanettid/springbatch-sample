@@ -16,7 +16,7 @@ import com.giovanetti.support.TestUtilsConfiguration;
 public class CommandLineJobRunnerTI {
 
 	@ClassRule
-	public static BatchProperties batchProperties = new BatchProperties();
+	public final static BatchProperties batchProperties = new BatchProperties();
 
 	@BeforeClass
 	public static void setupClass() throws IOException {
@@ -40,7 +40,7 @@ public class CommandLineJobRunnerTI {
 
 		CommandLineJobRunner.main(new String[] {
 				TestUtilsConfiguration.class.getName(),
-				JobConfiguration.JOB_NAME.toString(),
+                JobConfiguration.JOB_NAME.toString(),
 				JobConfiguration.OUTPUT_FILE_PARAMETER + "=target/out/output"
 						+ System.currentTimeMillis() + ".txt" });
 

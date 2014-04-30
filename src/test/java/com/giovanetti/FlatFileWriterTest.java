@@ -32,7 +32,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import com.giovanetti.support.BatchProperties;
 import com.giovanetti.support.TestUtilsConfiguration;
 
-//TODO : classe support de test ? factoriser job param builder avec autres classes de test
+//TODO : classe support de test ou bien rule ? factoriser job param builder avec autres classes de test
+//TODO : meme type de test pour jdbc reader
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestUtilsConfiguration.class })
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
@@ -47,19 +48,17 @@ public class FlatFileWriterTest {
 		jobParametersBuilder.addString(JobConfiguration.OUTPUT_FILE_PARAMETER,
 				outputFilePath);
 
-		StepExecution execution = MetaDataInstanceFactory
-				.createStepExecution(jobParametersBuilder.toJobParameters());
-
-		return execution;
+        return MetaDataInstanceFactory
+                .createStepExecution(jobParametersBuilder.toJobParameters());
 	}
 
 	@ClassRule
-	public static BatchProperties batchProperties = new BatchProperties();
+	public final static BatchProperties batchProperties = new BatchProperties();
 
 	@Inject
 	private FlatFileItemWriter<String> itemWriter;
 
-	private String outputFilePath = "target/out/output"
+	private final String outputFilePath = "target/out/output"
 			+ System.currentTimeMillis() + ".txt";
 
 	@BeforeClass
@@ -86,7 +85,7 @@ public class FlatFileWriterTest {
 	public void flatFileWriterOK() throws Exception {
 
 		// Arrange
-		List<String> items = new ArrayList<String>();
+		List<String> items = new ArrayList<>();
 		items.add("1");
 		items.add("2");
 

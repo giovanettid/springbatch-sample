@@ -16,84 +16,84 @@ import com.giovanetti.annotations.TechnicalDataSource;
 @PropertySource("classpath:batch.properties")
 public class ExternalConfiguration {
 
-	@Inject
-	private Environment environment;
+    @Inject
+    private Environment environment;
 
-	public enum DataSourceType {
-		FUNCTIONAL, TECHNICAL;
+    public enum DataSourceType {
+        FUNCTIONAL, TECHNICAL;
 
-		@Override
-		public String toString() {
-			return name().toLowerCase();
-		}
-	}
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    }
 
-	public enum DataSourcePropertyKeys {
+    public enum DataSourcePropertyKeys {
 
-		DRIVER_CLASS("driverclassname"), URL("url"), USERNAME("username"), PASSWORD(
-				"password");
+        DRIVER_CLASS("driverclassname"), URL("url"), USERNAME("username"), PASSWORD(
+                "password");
 
-		private final static String PREFIX = "ds";
+        private final static String PREFIX = "ds";
 
-		private String name;
+        private final String name;
 
-		private DataSourcePropertyKeys(String pName) {
-			this.name = pName;
-		}
+        private DataSourcePropertyKeys(String pName) {
+            this.name = pName;
+        }
 
-		@Override
-		public String toString() {
-			return name;
-		}
+        @Override
+        public String toString() {
+            return name;
+        }
 
-		public String name(DataSourceType dataSourceType) {
-			return PREFIX + "." + dataSourceType.toString() + "." + this;
-		}
+        public String name(DataSourceType dataSourceType) {
+            return PREFIX + "." + dataSourceType.toString() + "." + this;
+        }
 
-	}
+    }
 
-	public enum StepPropertyKeys {
+    public enum StepPropertyKeys {
 
-		COMMIT_INTERVAL("commit.interval");
+        COMMIT_INTERVAL("commit.interval");
 
-		private String name;
+        private final String name;
 
-		// TODO : check uncle bob for naming pArg...
-		private StepPropertyKeys(String pName) {
-			this.name = pName;
-		}
+        // TODO : check uncle bob for naming pArg...
+        private StepPropertyKeys(String pName) {
+            this.name = pName;
+        }
 
-		@Override
-		public String toString() {
-			return name;
-		}
+        @Override
+        public String toString() {
+            return name;
+        }
 
-	}
+    }
 
-	@Bean
-	@FunctionalDataSource
-	public DataSource functionnalDataSource() {
-		return createDataSource(DataSourceType.FUNCTIONAL);
-	}
+    @Bean
+    @FunctionalDataSource
+    DataSource functionnalDataSource() {
+        return createDataSource(DataSourceType.FUNCTIONAL);
+    }
 
-	@Bean
-	@TechnicalDataSource
-	public DataSource technicalDataSource() {
-		return createDataSource(DataSourceType.TECHNICAL);
-	}
+    @Bean
+    @TechnicalDataSource
+    DataSource technicalDataSource() {
+        return createDataSource(DataSourceType.TECHNICAL);
+    }
 
-	private DataSource createDataSource(DataSourceType dataSourceType) {
-		DriverManagerDataSource ds = new DriverManagerDataSource();
-		ds.setDriverClassName(environment
-				.getProperty(DataSourcePropertyKeys.DRIVER_CLASS
-						.name(dataSourceType)));
-		ds.setUrl(environment.getProperty(DataSourcePropertyKeys.URL
-				.name(dataSourceType)));
-		ds.setUsername(environment.getProperty(DataSourcePropertyKeys.USERNAME
-				.name(dataSourceType)));
-		ds.setPassword(environment.getProperty(DataSourcePropertyKeys.PASSWORD
-				.name(dataSourceType)));
-		return ds;
-	}
+    private DataSource createDataSource(DataSourceType dataSourceType) {
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+        ds.setDriverClassName(environment
+                .getProperty(DataSourcePropertyKeys.DRIVER_CLASS
+                        .name(dataSourceType)));
+        ds.setUrl(environment.getProperty(DataSourcePropertyKeys.URL
+                .name(dataSourceType)));
+        ds.setUsername(environment.getProperty(DataSourcePropertyKeys.USERNAME
+                .name(dataSourceType)));
+        ds.setPassword(environment.getProperty(DataSourcePropertyKeys.PASSWORD
+                .name(dataSourceType)));
+        return ds;
+    }
 
 }

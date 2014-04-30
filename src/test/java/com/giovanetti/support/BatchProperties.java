@@ -20,11 +20,7 @@ public class BatchProperties extends ExternalResource {
 
 	private File file;
 
-	List<String> lines = new ArrayList<String>();
-
-	public File getFile() {
-		return file;
-	}
+	final private List<String> lines = new ArrayList<>();
 
 	@Override
 	protected void before() throws Throwable {
@@ -36,12 +32,12 @@ public class BatchProperties extends ExternalResource {
 		delete();
 	}
 
-	protected void create() throws IOException {
+	void create() {
 		file = new File(TARGET_FOLDER_PATH + File.separator
 				+ BATCH_PROPERTIES_NAME);
 	}
 
-	protected void delete() {
+	void delete() {
 		file.delete();
 	}
 
@@ -51,18 +47,16 @@ public class BatchProperties extends ExternalResource {
 	}
 
 	public BatchProperties addTechnicalHsql() {
-		this.addHsql(DataSourceType.TECHNICAL);
-		return this;
+		return this.addHsql(DataSourceType.TECHNICAL);
 	}
 
-	public BatchProperties addHsql(DataSourceType dataSourceType) {
-		this.add(DataSourcePropertyKeys.DRIVER_CLASS.name(dataSourceType),
+	BatchProperties addHsql(DataSourceType dataSourceType) {
+		return this.add(DataSourcePropertyKeys.DRIVER_CLASS.name(dataSourceType),
 				"org.hsqldb.jdbcDriver")
 				.add(DataSourcePropertyKeys.URL.name(dataSourceType),
 						"jdbc:hsqldb:mem:" + dataSourceType)
 				.add(DataSourcePropertyKeys.USERNAME.name(dataSourceType), "sa")
 				.add(DataSourcePropertyKeys.PASSWORD.name(dataSourceType), "");
-		return this;
 	}
 
 	public BatchProperties add(String key, String value) {

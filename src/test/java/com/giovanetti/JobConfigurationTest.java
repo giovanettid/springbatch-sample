@@ -32,7 +32,7 @@ import com.giovanetti.support.TestUtilsConfiguration;
 public class JobConfigurationTest {
 
 	@ClassRule
-	public static BatchProperties batchProperties = new BatchProperties();
+	public final static BatchProperties batchProperties = new BatchProperties();
 
 	@BeforeClass
 	public static void setupClass() throws IOException {
@@ -84,8 +84,6 @@ public class JobConfigurationTest {
 		StepExecution stepExecution = stepExecutions.iterator().next();
 		assertThat(stepExecution.getReadCount()).isEqualTo(2);
 		assertThat(stepExecution.getWriteCount()).isEqualTo(2);
-		// TODO : remove this assert after remove CopyOfBatchExtractionTest
-		assertThat(stepExecution.getCommitCount()).isEqualTo(3);
 
 	}
 

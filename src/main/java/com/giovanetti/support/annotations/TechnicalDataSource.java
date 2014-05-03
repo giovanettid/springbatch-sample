@@ -1,4 +1,4 @@
-package com.giovanetti.annotations;
+package com.giovanetti.support.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

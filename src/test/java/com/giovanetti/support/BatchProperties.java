@@ -8,8 +8,8 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.rules.ExternalResource;
 
-import com.giovanetti.ExternalConfiguration.DataSourceType;
-import com.giovanetti.ExternalConfiguration.DataSourcePropertyKeys;
+import com.giovanetti.support.ExternalConfiguration.DataSourceType;
+import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
 
 public class BatchProperties extends ExternalResource {
 

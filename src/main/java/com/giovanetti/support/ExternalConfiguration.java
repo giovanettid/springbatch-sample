@@ -1,4 +1,4 @@
-package com.giovanetti;
+package com.giovanetti.support;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -9,8 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import com.giovanetti.annotations.FunctionalDataSource;
-import com.giovanetti.annotations.TechnicalDataSource;
+import com.giovanetti.support.annotations.FunctionalDataSource;
+import com.giovanetti.support.annotations.TechnicalDataSource;
 
 @Configuration
 @PropertySource("classpath:batch.properties")

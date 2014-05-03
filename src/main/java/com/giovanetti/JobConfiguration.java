@@ -1,6 +1,8 @@
 package com.giovanetti;
 
-import com.giovanetti.annotations.FunctionalDataSource;
+import com.giovanetti.support.annotations.FunctionalDataSource;
+import com.giovanetti.support.CustomBatchConfigurer;
+import com.giovanetti.support.ExternalConfiguration;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.Step;
@@ -33,7 +35,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableBatchProcessing
-@Import({ExternalConfiguration.class, BatchConfigurerImpl.class})
+@Import({ExternalConfiguration.class, CustomBatchConfigurer.class})
 public class JobConfiguration {
 
     public final static String JOB_NAME = "extractionJob";

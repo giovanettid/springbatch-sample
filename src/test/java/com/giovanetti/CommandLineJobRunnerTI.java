@@ -2,6 +2,7 @@ package com.giovanetti;
 
 import java.io.IOException;
 
+import com.giovanetti.support.ExternalConfiguration;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;

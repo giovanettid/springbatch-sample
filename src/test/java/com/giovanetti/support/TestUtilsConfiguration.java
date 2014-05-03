@@ -12,8 +12,8 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import com.giovanetti.JobConfiguration;
-import com.giovanetti.annotations.FunctionalDataSource;
-import com.giovanetti.annotations.TechnicalDataSource;
+import com.giovanetti.support.annotations.FunctionalDataSource;
+import com.giovanetti.support.annotations.TechnicalDataSource;
 
 @Configuration
 @Import({ JobConfiguration.class })

@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import com.giovanetti.support.ExternalConfiguration;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;

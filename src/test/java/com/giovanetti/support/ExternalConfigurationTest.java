@@ -1,4 +1,4 @@
-package com.giovanetti;
+package com.giovanetti.support;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,11 +18,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.giovanetti.ExternalConfiguration.DataSourcePropertyKeys;
-import com.giovanetti.ExternalConfiguration.DataSourceType;
-import com.giovanetti.annotations.FunctionalDataSource;
-import com.giovanetti.annotations.TechnicalDataSource;
-import com.giovanetti.support.BatchProperties;
+import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
+import com.giovanetti.support.ExternalConfiguration.DataSourceType;
+import com.giovanetti.support.annotations.FunctionalDataSource;
+import com.giovanetti.support.annotations.TechnicalDataSource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { ExternalConfiguration.class })

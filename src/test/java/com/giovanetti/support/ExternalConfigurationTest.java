@@ -24,57 +24,61 @@ import com.giovanetti.support.annotations.FunctionalDataSource;
 import com.giovanetti.support.annotations.TechnicalDataSource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { ExternalConfiguration.class })
+@ContextConfiguration(classes = {ExternalConfiguration.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ExternalConfigurationTest {
 
-	@ClassRule
-	public final static BatchProperties batchProperties = new BatchProperties();
+    @ClassRule
+    public final static BatchProperties batchProperties = new BatchProperties();
 
-	@BeforeClass
-	public static void setupClass() throws IOException {
-		batchProperties.addTechnicalHsql().addFunctionalHsql().flush();
-	}
+    @BeforeClass
+    public static void setupClass() throws IOException {
+        batchProperties.addTechnicalHsql().addFunctionalHsql().flush();
+    }
 
-	@Inject
-	private Environment environment;
+    @Inject
+    private Environment environment;
 
-	@Inject
-	@FunctionalDataSource
-	private DataSource functionnalDataSource;
+    @Inject
+    @FunctionalDataSource
+    private DataSource functionnalDataSource;
 
-	@Inject
-	@TechnicalDataSource
-	private DataSource technicalDataSource;
+    @Inject
+    @TechnicalDataSource
+    private DataSource technicalDataSource;
 
-	@Test
-	public void functionnalDatasource() {
-		assertThat(functionnalDataSource).isInstanceOf(
-				DriverManagerDataSource.class);
-		DriverManagerDataSource dmds = (DriverManagerDataSource) functionnalDataSource;
-		assertThat(dmds.getUrl()).isEqualTo(
-				environment.getProperty(DataSourcePropertyKeys.URL.name(DataSourceType.FUNCTIONAL)));
-		assertThat(dmds.getUsername()).isEqualTo(
-				environment.getProperty(DataSourcePropertyKeys.USERNAME
-						.name(DataSourceType.FUNCTIONAL)));
-		assertThat(dmds.getPassword()).isEqualTo(
-				environment.getProperty(DataSourcePropertyKeys.PASSWORD
-						.name(DataSourceType.FUNCTIONAL)));
-	}
+    @Test
+    public void functionnalDatasource() {
+        assertThat(functionnalDataSource).isInstanceOf(
+                DriverManagerDataSource.class);
+        DriverManagerDataSource dmds = (DriverManagerDataSource) functionnalDataSource;
+        assertThat(dmds.getUrl()).isEqualTo(
+                environment.getProperty(DataSourcePropertyKeys.URL.name(DataSourceType.FUNCTIONAL)));
+        assertThat(dmds.getUsername()).isEqualTo(
+                environment.getProperty(DataSourcePropertyKeys.USERNAME
+                        .name(DataSourceType.FUNCTIONAL))
+        );
+        assertThat(dmds.getPassword()).isEqualTo(
+                environment.getProperty(DataSourcePropertyKeys.PASSWORD
+                        .name(DataSourceType.FUNCTIONAL))
+        );
+    }
 
-	@Test
-	public void technicalDatasource() {
-		assertThat(functionnalDataSource).isInstanceOf(
-				DriverManagerDataSource.class);
-		DriverManagerDataSource dmds = (DriverManagerDataSource) technicalDataSource;
-		assertThat(dmds.getUrl()).isEqualTo(
-				environment.getProperty(DataSourcePropertyKeys.URL.name(DataSourceType.TECHNICAL)));
-		assertThat(dmds.getUsername()).isEqualTo(
-				environment.getProperty(DataSourcePropertyKeys.USERNAME
-						.name(DataSourceType.TECHNICAL)));
-		assertThat(dmds.getPassword()).isEqualTo(
-				environment.getProperty(DataSourcePropertyKeys.PASSWORD
-						.name(DataSourceType.TECHNICAL)));
-	}
+    @Test
+    public void technicalDatasource() {
+        assertThat(functionnalDataSource).isInstanceOf(
+                DriverManagerDataSource.class);
+        DriverManagerDataSource dmds = (DriverManagerDataSource) technicalDataSource;
+        assertThat(dmds.getUrl()).isEqualTo(
+                environment.getProperty(DataSourcePropertyKeys.URL.name(DataSourceType.TECHNICAL)));
+        assertThat(dmds.getUsername()).isEqualTo(
+                environment.getProperty(DataSourcePropertyKeys.USERNAME
+                        .name(DataSourceType.TECHNICAL))
+        );
+        assertThat(dmds.getPassword()).isEqualTo(
+                environment.getProperty(DataSourcePropertyKeys.PASSWORD
+                        .name(DataSourceType.TECHNICAL))
+        );
+    }
 
 }

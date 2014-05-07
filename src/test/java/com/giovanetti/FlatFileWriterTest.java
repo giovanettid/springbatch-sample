@@ -1,25 +1,13 @@
 package com.giovanetti;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import com.giovanetti.support.ExternalConfiguration;
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Before;
+import com.giovanetti.support.BatchProperties;
+import com.giovanetti.support.TestUtilsConfiguration;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.batch.test.StepScopeTestExecutionListener;
@@ -30,72 +18,59 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import com.giovanetti.support.BatchProperties;
-import com.giovanetti.support.TestUtilsConfiguration;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
-//TODO : classe support de test ou bien rule ? factoriser job param builder avec autres classes de test
+import static com.giovanetti.support.FlatFileItemWriterConsumer.accept;
+import static java.nio.file.Files.readAllLines;
+import static org.assertj.core.api.Assertions.assertThat;
+
 //TODO : meme type de test pour jdbc reader
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestUtilsConfiguration.class })
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
-		StepScopeTestExecutionListener.class })
+@ContextConfiguration(classes = {TestUtilsConfiguration.class})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
+        StepScopeTestExecutionListener.class})
 // TODO : check DirtyContextListener
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class FlatFileWriterTest {
 
-	public StepExecution getStepExecution() {
+    private static final String OUTPUT_FILE_PATH = "target/out/output"
+            + System.currentTimeMillis() + ".txt";
 
-		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
-		jobParametersBuilder.addString(JobConfiguration.OUTPUT_FILE_PARAMETER,
-				outputFilePath);
-
+    public static StepExecution getStepExecution() {
         return MetaDataInstanceFactory
-                .createStepExecution(jobParametersBuilder.toJobParameters());
-	}
+                .createStepExecution(new JobParametersBuilder().addString(JobConfiguration.OUTPUT_FILE_PARAMETER,
+                        OUTPUT_FILE_PATH).toJobParameters());
+    }
 
-	@ClassRule
-	public final static BatchProperties batchProperties = new BatchProperties();
+    @ClassRule
+    public final static BatchProperties batchProperties = BatchProperties.getDefault();
 
-	@Inject
-	private FlatFileItemWriter<String> itemWriter;
+    @Inject
+    private FlatFileItemWriter<String> itemWriter;
 
-	private final String outputFilePath = "target/out/output"
-			+ System.currentTimeMillis() + ".txt";
+    @BeforeClass
+    public static void setupClass() throws IOException {
+        batchProperties.flush();
+    }
 
-	@BeforeClass
-	public static void setupClass() throws IOException {
-		batchProperties
-				.addTechnicalHsql()
-				.addFunctionalHsql()
-				.add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
-						.toString(),
-						"1").flush();
-	}
+    @Test
+    public void flatFileWriterOK() throws IOException {
 
-	@Before
-	public void setup() {
-		itemWriter.open(new ExecutionContext());
-	}
+        // Arrange
+        List<String> items = new ArrayList<>();
+        items.add("1");
+        items.add("2");
 
-	@After
-	public void tearDown() {
-		itemWriter.close();
-	}
+        // Act
+        accept(itemWriter, (writer) -> writer.write(items));
 
-	@Test
-	public void flatFileWriterOK() throws Exception {
+        // Assert
+        assertThat(readAllLines(Paths.get(OUTPUT_FILE_PATH))).hasSize(2).contains("1", "2");
 
-		// Arrange
-		List<String> items = new ArrayList<>();
-		items.add("1");
-		items.add("2");
-
-		// Act
-		itemWriter.write(items);
-
-		// Assert
-		List<String> lines = FileUtils.readLines(new File(outputFilePath));
-		assertThat(lines).hasSize(2).contains("1", "2");
-	}
+    }
 
 }

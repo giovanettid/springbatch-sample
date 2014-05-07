@@ -13,59 +13,69 @@ import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
 
 public class BatchProperties extends ExternalResource {
 
-	private final static String TARGET_FOLDER_PATH = "target" + File.separator
-			+ "test-classes";
+    private final static String TARGET_FOLDER_PATH = "target" + File.separator
+            + "test-classes";
 
-	private final static String BATCH_PROPERTIES_NAME = "batch.properties";
+    private final static String BATCH_PROPERTIES_NAME = "batch.properties";
 
-	private File file;
+    private File file;
 
-	final private List<String> lines = new ArrayList<>();
+    final private List<String> lines = new ArrayList<>();
 
-	@Override
-	protected void before() throws Throwable {
-		create();
-	}
+    public static BatchProperties getDefault() {
+        return new BatchProperties().addTechnicalHsql()
+                .addFunctionalHsql()
+                .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
+                                .toString(),
+                        "1"
+                );
 
-	@Override
-	protected void after() {
-		delete();
-	}
+    }
 
-	void create() {
-		file = new File(TARGET_FOLDER_PATH + File.separator
-				+ BATCH_PROPERTIES_NAME);
-	}
+    @Override
+    protected void before() throws Throwable {
+        create();
+    }
 
-	void delete() {
-		file.delete();
-	}
+    @Override
+    protected void after() {
+        delete();
+    }
 
-	public BatchProperties addFunctionalHsql() {
-		this.addHsql(DataSourceType.FUNCTIONAL);
-		return this;
-	}
+    void create() {
+        file = new File(TARGET_FOLDER_PATH + File.separator
+                + BATCH_PROPERTIES_NAME);
+    }
 
-	public BatchProperties addTechnicalHsql() {
-		return this.addHsql(DataSourceType.TECHNICAL);
-	}
+    void delete() {
+        file.delete();
+    }
 
-	BatchProperties addHsql(DataSourceType dataSourceType) {
-		return this.add(DataSourcePropertyKeys.DRIVER_CLASS.name(dataSourceType),
-				"org.hsqldb.jdbcDriver")
-				.add(DataSourcePropertyKeys.URL.name(dataSourceType),
-						"jdbc:hsqldb:mem:" + dataSourceType)
-				.add(DataSourcePropertyKeys.USERNAME.name(dataSourceType), "sa")
-				.add(DataSourcePropertyKeys.PASSWORD.name(dataSourceType), "");
-	}
+    public BatchProperties addFunctionalHsql() {
+        this.addHsql(DataSourceType.FUNCTIONAL);
+        return this;
+    }
 
-	public BatchProperties add(String key, String value) {
-		lines.add(key + "=" + value);
-		return this;
-	}
+    public BatchProperties addTechnicalHsql() {
+        return this.addHsql(DataSourceType.TECHNICAL);
+    }
 
-	public void flush() throws IOException {
-		FileUtils.writeLines(file, lines);
-	}
+    BatchProperties addHsql(DataSourceType dataSourceType) {
+        return this.add(DataSourcePropertyKeys.DRIVER_CLASS.name(dataSourceType),
+                "org.hsqldb.jdbcDriver")
+                .add(DataSourcePropertyKeys.URL.name(dataSourceType),
+                        "jdbc:hsqldb:mem:" + dataSourceType)
+                .add(DataSourcePropertyKeys.USERNAME.name(dataSourceType), "sa")
+                .add(DataSourcePropertyKeys.PASSWORD.name(dataSourceType), "");
+    }
+
+    public BatchProperties add(String key, String value) {
+        lines.add(key + "=" + value);
+        return this;
+    }
+
+    public void flush() throws IOException {
+        FileUtils.writeLines(file, lines);
+    }
 
 }

@@ -28,69 +28,68 @@ import com.giovanetti.support.BatchProperties;
 import com.giovanetti.support.TestUtilsConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestUtilsConfiguration.class })
+@ContextConfiguration(classes = {TestUtilsConfiguration.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class JobConfigurationTest {
 
-	@ClassRule
-	public final static BatchProperties batchProperties = new BatchProperties();
+    private static final String OUTPUT_FILE_PATH = "target/out/output"
+            + System.currentTimeMillis() + ".txt";
 
-	@BeforeClass
-	public static void setupClass() throws IOException {
-		batchProperties
-				.addTechnicalHsql()
-				.addFunctionalHsql()
-				.add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
-						.toString(),
-						"1").flush();
-	}
+    @ClassRule
+    public final static BatchProperties batchProperties = new BatchProperties();
 
-	@Inject
-	private JobLauncherTestUtils jobLauncherTestUtils;
+    @BeforeClass
+    public static void setupClass() throws IOException {
+        batchProperties
+                .addTechnicalHsql()
+                .addFunctionalHsql()
+                .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
+                                .toString(),
+                        "1"
+                ).flush();
+    }
 
-	@Inject
-	private JdbcTemplate jdbcTemplate;
+    @Inject
+    private JobLauncherTestUtils jobLauncherTestUtils;
 
-	@Test
-	public void databaseInitialisationOK() {
+    @Inject
+    private JdbcTemplate jdbcTemplate;
 
-		// Act & Assert
-		assertThat(
-				jdbcTemplate.queryForObject("select count(*) from USER",
-						Integer.class)).isEqualTo(2);
-	}
+    @Test
+    public void databaseInitialisationOK() {
 
-	@Test
-	public void jobExtractionOK() throws Exception {
+        // Act & Assert
+        assertThat(
+                jdbcTemplate.queryForObject("select count(*) from USER",
+                        Integer.class)
+        ).isEqualTo(2);
+    }
 
-		// Arrange
-		String outputFilePath = "target/out/output"
-				+ System.currentTimeMillis() + ".txt";
-		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
-		jobParametersBuilder.addString(JobConfiguration.OUTPUT_FILE_PARAMETER,
-				outputFilePath);
+    @Test
+    public void jobExtractionOK() throws Exception {
 
-		// Act
-		JobExecution jobExecution = jobLauncherTestUtils
-				.launchJob(jobParametersBuilder.toJobParameters());
+        // Act
+        JobExecution jobExecution = jobLauncherTestUtils
+                .launchJob(new JobParametersBuilder().addString(JobConfiguration.OUTPUT_FILE_PARAMETER,
+                        OUTPUT_FILE_PATH).toJobParameters());
 
-		// Assert
-		assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
+        // Assert
+        assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
 
-		Collection<StepExecution> stepExecutions = jobExecution
-				.getStepExecutions();
+        Collection<StepExecution> stepExecutions = jobExecution
+                .getStepExecutions();
 
-		assertThat(stepExecutions).hasSize(1);
+        assertThat(stepExecutions).hasSize(1);
 
-		StepExecution stepExecution = stepExecutions.iterator().next();
-		assertThat(stepExecution.getReadCount()).isEqualTo(2);
-		assertThat(stepExecution.getWriteCount()).isEqualTo(2);
+        StepExecution stepExecution = stepExecutions.iterator().next();
+        assertThat(stepExecution.getReadCount()).isEqualTo(2);
+        assertThat(stepExecution.getWriteCount()).isEqualTo(2);
 
-	}
+    }
 
-	@Test(expected = JobParametersInvalidException.class)
-	public void jobExtraction_ParametreInvalide_KO() throws Exception {
-		jobLauncherTestUtils.launchJob();
-	}
+    @Test(expected = JobParametersInvalidException.class)
+    public void jobExtraction_ParametreInvalide_KO() throws Exception {
+        jobLauncherTestUtils.launchJob();
+    }
 
 }

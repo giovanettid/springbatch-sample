@@ -74,8 +74,12 @@ public class BatchProperties extends ExternalResource {
         return this;
     }
 
-    public void flush() throws IOException {
-        FileUtils.writeLines(file, lines);
+    public void flush() {
+        try {
+            FileUtils.writeLines(file, lines);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
 }

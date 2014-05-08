@@ -87,7 +87,9 @@ public class JobConfiguration {
         jdbcCursorItemReader.setDataSource(dataSource);
         // TODO extract all columns => bean User
         jdbcCursorItemReader.setSql("select ID from USER");
-        jdbcCursorItemReader.setRowMapper(new SingleColumnRowMapper<String>());
+        SingleColumnRowMapper<String> rowMapper = new SingleColumnRowMapper<>();
+        rowMapper.setRequiredType(String.class);
+        jdbcCursorItemReader.setRowMapper(rowMapper);
         return jdbcCursorItemReader;
     }
 

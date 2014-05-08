@@ -21,14 +21,12 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.giovanetti.support.FlatFileItemWriterConsumer.accept;
 import static java.nio.file.Files.readAllLines;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.util.Lists.newArrayList;
 
-//TODO : meme type de test pour jdbc reader
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestUtilsConfiguration.class})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
@@ -42,8 +40,9 @@ public class FlatFileWriterTest {
 
     public static StepExecution getStepExecution() {
         return MetaDataInstanceFactory
-                .createStepExecution(new JobParametersBuilder().addString(JobConfiguration.OUTPUT_FILE_PARAMETER,
-                        OUTPUT_FILE_PATH).toJobParameters());
+                .createStepExecution(new JobParametersBuilder()
+                        .addString(JobConfiguration.OUTPUT_FILE_PARAMETER, OUTPUT_FILE_PATH)
+                        .toJobParameters());
     }
 
     @ClassRule
@@ -53,23 +52,20 @@ public class FlatFileWriterTest {
     private FlatFileItemWriter<String> itemWriter;
 
     @BeforeClass
-    public static void setupClass() throws IOException {
+    public static void setupClass() {
         batchProperties.flush();
     }
 
     @Test
-    public void flatFileWriterOK() throws IOException {
-
-        // Arrange
-        List<String> items = new ArrayList<>();
-        items.add("1");
-        items.add("2");
+    public void write() throws IOException {
 
         // Act
-        accept(itemWriter, (writer) -> writer.write(items));
+        accept(itemWriter, newArrayList("1", "2"), itemWriter::write);
 
         // Assert
-        assertThat(readAllLines(Paths.get(OUTPUT_FILE_PATH))).hasSize(2).contains("1", "2");
+        assertThat(readAllLines(Paths.get(OUTPUT_FILE_PATH)))
+                .hasSize(2)
+                .containsExactly("1", "2");
 
     }
 

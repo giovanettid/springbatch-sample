@@ -2,7 +2,6 @@ package com.giovanetti;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -39,7 +38,7 @@ public class JobConfigurationTest {
     public final static BatchProperties batchProperties = new BatchProperties();
 
     @BeforeClass
-    public static void setupClass() throws IOException {
+    public static void setupClass() {
         batchProperties
                 .addTechnicalHsql()
                 .addFunctionalHsql()

@@ -3,14 +3,16 @@ package com.giovanetti.support;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 
+import java.util.List;
+
 public interface FlatFileItemWriterConsumer<T> {
 
     void accept(T t) throws Exception;
 
-    public static <R> void accept(FlatFileItemWriter<R> t, FlatFileItemWriterConsumer<FlatFileItemWriter<R>> consumer) {
+    public static <T> void accept(FlatFileItemWriter<T> t, List<T> items, FlatFileItemWriterConsumer<List<T>> consumer) {
         try {
             t.open(new ExecutionContext());
-            consumer.accept(t);
+            consumer.accept(items);
             t.close();
         } catch (Exception e) {
             throw new IllegalStateException(e);

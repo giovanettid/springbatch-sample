@@ -2,8 +2,6 @@ package com.giovanetti.support;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
@@ -29,11 +27,11 @@ import com.giovanetti.support.annotations.TechnicalDataSource;
 public class ExternalConfigurationTest {
 
     @ClassRule
-    public final static BatchProperties batchProperties = new BatchProperties();
+    public final static BatchProperties batchProperties = BatchProperties.getDefault();
 
     @BeforeClass
-    public static void setupClass() throws IOException {
-        batchProperties.addTechnicalHsql().addFunctionalHsql().flush();
+    public static void setupClass() {
+        batchProperties.flush();
     }
 
     @Inject

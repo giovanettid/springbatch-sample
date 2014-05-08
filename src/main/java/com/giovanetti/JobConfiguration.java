@@ -1,5 +1,6 @@
 package com.giovanetti;
 
+import com.giovanetti.support.annotations.CommitInterval;
 import com.giovanetti.support.annotations.FunctionalDataSource;
 import com.giovanetti.support.CustomBatchConfigurer;
 import com.giovanetti.support.ExternalConfiguration;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 
@@ -44,9 +44,6 @@ public class JobConfiguration {
     public final static String OUTPUT_FILE_PARAMETER = "output.file.path";
 
     @Inject
-    private Environment environment;
-
-    @Inject
     private JobBuilderFactory jobBuilders;
 
     @Inject
@@ -55,6 +52,10 @@ public class JobConfiguration {
     @Inject
     @FunctionalDataSource
     private DataSource dataSource;
+
+    @Inject
+    @CommitInterval
+    private Integer commitInterval;
 
     @Bean
     JobParametersValidator jobParametersValidator() {
@@ -73,11 +74,7 @@ public class JobConfiguration {
         return stepBuilders
                 .get(STEP_NAME)
                 .transactionManager(new ResourcelessTransactionManager())
-                .<String, String>chunk(
-                        Integer.parseInt(environment
-                                .getProperty(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
-                                        .toString()))
-                ).reader(reader())
+                .<String, String>chunk(commitInterval).reader(reader())
                 .writer(writer(null)).build();
     }
 

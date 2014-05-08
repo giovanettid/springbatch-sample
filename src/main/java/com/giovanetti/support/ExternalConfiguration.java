@@ -3,6 +3,7 @@ package com.giovanetti.support;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import com.giovanetti.support.annotations.CommitInterval;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -68,6 +69,14 @@ public class ExternalConfiguration {
             return name;
         }
 
+    }
+
+    @Bean
+    @CommitInterval
+    Integer commitInterval() {
+        return Integer.parseInt(environment
+                .getProperty(StepPropertyKeys.COMMIT_INTERVAL
+                        .toString()));
     }
 
     @Bean

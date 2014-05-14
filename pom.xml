@@ -3,11 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.giovanetti</groupId>
-	<artifactId>springbatch-sample</artifactId>
+	<artifactId>springbatch-sample-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+    <modules>
+        <module>springbatch-sample</module>
+        <module>springbatch-support</module>
+    </modules>
+    <packaging>pom</packaging>
 
-	<name>springbatch-sample</name>
+	<name>springbatch-sample-parent</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>

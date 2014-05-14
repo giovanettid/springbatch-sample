@@ -1,7 +1,8 @@
 package com.giovanetti;
 
 import com.giovanetti.support.BatchProperties;
-import com.giovanetti.support.TestUtilsConfiguration;
+import com.giovanetti.support.FlatFileItemWriterConsumer;
+import org.assertj.core.util.Lists;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -22,10 +23,8 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import static com.giovanetti.support.FlatFileItemWriterConsumer.accept;
 import static java.nio.file.Files.readAllLines;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.util.Lists.newArrayList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestUtilsConfiguration.class})
@@ -60,7 +59,7 @@ public class FlatFileWriterTest {
     public void write() throws IOException {
 
         // Act
-        accept(itemWriter, newArrayList("1", "2"), itemWriter::write);
+        FlatFileItemWriterConsumer.accept(itemWriter, Lists.newArrayList("1", "2"), itemWriter::write);
 
         // Assert
         assertThat(readAllLines(Paths.get(OUTPUT_FILE_PATH)))

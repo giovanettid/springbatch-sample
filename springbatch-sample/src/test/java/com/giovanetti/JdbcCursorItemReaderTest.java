@@ -1,7 +1,7 @@
 package com.giovanetti;
 
 import com.giovanetti.support.BatchProperties;
-import com.giovanetti.support.TestUtilsConfiguration;
+import com.giovanetti.support.JdbcCursorItemReaderSupplier;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 
-import static com.giovanetti.support.JdbcCursorItemReaderSupplier.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,7 +35,7 @@ public class JdbcCursorItemReaderTest {
     @Test
     public void read() {
 
-        assertThat(get(itemReader, itemReader::read))
+        assertThat(JdbcCursorItemReaderSupplier.get(itemReader, itemReader::read))
                 .isNotEmpty()
                 .hasSize(2)
                 .containsExactly("1", "2");

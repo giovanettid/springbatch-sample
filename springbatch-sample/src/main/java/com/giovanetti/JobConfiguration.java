@@ -1,8 +1,8 @@
 package com.giovanetti;
 
+import com.giovanetti.support.CustomBatchConfigurer;
 import com.giovanetti.support.annotations.CommitInterval;
 import com.giovanetti.support.annotations.FunctionalDataSource;
-import com.giovanetti.support.CustomBatchConfigurer;
 import com.giovanetti.support.ExternalConfiguration;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersValidator;

@@ -4,14 +4,13 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import com.giovanetti.support.annotations.CommitInterval;
+import com.giovanetti.support.annotations.FunctionalDataSource;
+import com.giovanetti.support.annotations.TechnicalDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
-import com.giovanetti.support.annotations.FunctionalDataSource;
-import com.giovanetti.support.annotations.TechnicalDataSource;
 
 @Configuration
 @PropertySource("classpath:batch.properties")

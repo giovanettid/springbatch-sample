@@ -1,7 +1,6 @@
 package com.giovanetti;
 
-import java.io.IOException;
-
+import com.giovanetti.support.BatchProperties;
 import com.giovanetti.support.ExternalConfiguration;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -11,8 +10,7 @@ import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.springframework.batch.core.launch.support.CommandLineJobRunner;
 import org.springframework.batch.core.launch.support.ExitCodeMapper;
 
-import com.giovanetti.support.BatchProperties;
-import com.giovanetti.support.TestUtilsConfiguration;
+import java.io.IOException;
 
 public class CommandLineJobRunnerTI {
 

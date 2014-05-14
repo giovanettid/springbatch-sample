@@ -1,15 +1,14 @@
 package com.giovanetti.support;
 
+import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
+import com.giovanetti.support.ExternalConfiguration.DataSourceType;
+import org.apache.commons.io.FileUtils;
+import org.junit.rules.ExternalResource;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.rules.ExternalResource;
-
-import com.giovanetti.support.ExternalConfiguration.DataSourceType;
-import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
 
 public class BatchProperties extends ExternalResource {
 

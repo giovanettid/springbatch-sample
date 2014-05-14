@@ -1,4 +1,4 @@
-package com.giovanetti.support;
+package com.giovanetti;
 
 import javax.sql.DataSource;
 

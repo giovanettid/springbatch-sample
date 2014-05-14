@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.giovanetti.support.annotations.TechnicalDataSource;
 
+//TODO : coverage
 @Configuration
 public class CustomBatchConfigurer implements BatchConfigurer {
 

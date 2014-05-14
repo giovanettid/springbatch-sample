@@ -1,21 +1,12 @@
 package com.giovanetti;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Collection;
-
-import javax.inject.Inject;
-
+import com.giovanetti.support.BatchProperties;
 import com.giovanetti.support.ExternalConfiguration;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.*;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
@@ -23,8 +14,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.giovanetti.support.BatchProperties;
-import com.giovanetti.support.TestUtilsConfiguration;
+import javax.inject.Inject;
+import java.util.Collection;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestUtilsConfiguration.class})

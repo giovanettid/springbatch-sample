@@ -1,8 +1,7 @@
 package com.giovanetti;
 
-import com.giovanetti.support.BatchProperties;
-import com.giovanetti.support.JdbcCursorItemReaderSupplier;
-import org.junit.BeforeClass;
+import com.giovanetti.support.function.JdbcCursorItemReaderSupplier;
+import com.giovanetti.support.rule.BatchProperties;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +16,7 @@ import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestUtilsConfiguration.class})
+@ContextConfiguration(classes = {TestConfiguration.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class JdbcCursorItemReaderTest {
 
@@ -26,11 +25,6 @@ public class JdbcCursorItemReaderTest {
 
     @Inject
     private JdbcCursorItemReader<String> itemReader;
-
-    @BeforeClass
-    public static void setupClass() {
-        batchProperties.flush();
-    }
 
     @Test
     public void read() {

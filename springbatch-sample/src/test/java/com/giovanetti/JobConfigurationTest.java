@@ -1,8 +1,8 @@
 package com.giovanetti;
 
-import com.giovanetti.support.BatchProperties;
 import com.giovanetti.support.ExternalConfiguration;
-import org.junit.BeforeClass;
+import com.giovanetti.support.rule.BatchProperties;
+import com.google.common.collect.Iterables;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,7 @@ import java.util.Collection;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestUtilsConfiguration.class})
+@ContextConfiguration(classes = {TestConfiguration.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class JobConfigurationTest {
 
@@ -28,18 +28,13 @@ public class JobConfigurationTest {
             + System.currentTimeMillis() + ".txt";
 
     @ClassRule
-    public final static BatchProperties batchProperties = new BatchProperties();
-
-    @BeforeClass
-    public static void setupClass() {
-        batchProperties
-                .addTechnicalHsql()
-                .addFunctionalHsql()
-                .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
-                                .toString(),
-                        "1"
-                ).flush();
-    }
+    public final static BatchProperties batchProperties = new BatchProperties()
+            .addTechnicalHsql()
+            .addFunctionalHsql()
+            .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
+                            .toString(),
+                    "1"
+            );
 
     @Inject
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -73,7 +68,7 @@ public class JobConfigurationTest {
 
         assertThat(stepExecutions).hasSize(1);
 
-        StepExecution stepExecution = stepExecutions.iterator().next();
+        StepExecution stepExecution = Iterables.getOnlyElement(stepExecutions);
         assertThat(stepExecution.getReadCount()).isEqualTo(2);
         assertThat(stepExecution.getWriteCount()).isEqualTo(2);
 

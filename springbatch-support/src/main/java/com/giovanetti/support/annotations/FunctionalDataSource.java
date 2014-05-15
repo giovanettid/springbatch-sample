@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
-@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 public @interface FunctionalDataSource {

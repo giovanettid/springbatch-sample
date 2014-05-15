@@ -1,11 +1,10 @@
 package com.giovanetti.support;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
-import org.junit.BeforeClass;
+import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
+import com.giovanetti.support.ExternalConfiguration.DataSourceType;
+import com.giovanetti.support.annotations.FunctionalDataSource;
+import com.giovanetti.support.annotations.TechnicalDataSource;
+import com.giovanetti.support.rule.BatchProperties;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +15,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
-import com.giovanetti.support.ExternalConfiguration.DataSourceType;
-import com.giovanetti.support.annotations.FunctionalDataSource;
-import com.giovanetti.support.annotations.TechnicalDataSource;
+import javax.inject.Inject;
+import javax.sql.DataSource;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ExternalConfiguration.class})
@@ -28,11 +27,6 @@ public class ExternalConfigurationTest {
 
     @ClassRule
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
-
-    @BeforeClass
-    public static void setupClass() {
-        batchProperties.flush();
-    }
 
     @Inject
     private Environment environment;

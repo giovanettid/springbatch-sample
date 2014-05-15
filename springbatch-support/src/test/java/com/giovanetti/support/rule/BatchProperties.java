@@ -1,5 +1,6 @@
-package com.giovanetti.support;
+package com.giovanetti.support.rule;
 
+import com.giovanetti.support.ExternalConfiguration;
 import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
 import com.giovanetti.support.ExternalConfiguration.DataSourceType;
 import org.apache.commons.io.FileUtils;
@@ -44,6 +45,7 @@ public class BatchProperties extends ExternalResource {
     void create() {
         file = new File(TARGET_FOLDER_PATH + File.separator
                 + BATCH_PROPERTIES_NAME);
+        flush();
     }
 
     void delete() {
@@ -73,7 +75,7 @@ public class BatchProperties extends ExternalResource {
         return this;
     }
 
-    public void flush() {
+    private void flush() {
         try {
             FileUtils.writeLines(file, lines);
         } catch (IOException e) {

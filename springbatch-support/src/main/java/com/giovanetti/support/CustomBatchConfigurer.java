@@ -16,13 +16,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.giovanetti.support.annotations.TechnicalDataSource;
 
-//TODO : coverage
 @Configuration
 public class CustomBatchConfigurer implements BatchConfigurer {
 
     @Inject
     @TechnicalDataSource
-    private DataSource dataSource;
+    DataSource dataSource;
 
     @Override
     public JobRepository getJobRepository() {

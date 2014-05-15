@@ -1,9 +1,8 @@
 package com.giovanetti;
 
-import com.giovanetti.support.BatchProperties;
-import com.giovanetti.support.FlatFileItemWriterConsumer;
+import com.giovanetti.support.function.FlatFileItemWriterConsumer;
+import com.giovanetti.support.rule.BatchProperties;
 import org.assertj.core.util.Lists;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +26,7 @@ import static java.nio.file.Files.readAllLines;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestUtilsConfiguration.class})
+@ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         StepScopeTestExecutionListener.class})
 // TODO : check DirtyContextListener
@@ -49,11 +48,6 @@ public class FlatFileWriterTest {
 
     @Inject
     private FlatFileItemWriter<String> itemWriter;
-
-    @BeforeClass
-    public static void setupClass() {
-        batchProperties.flush();
-    }
 
     @Test
     public void write() throws IOException {

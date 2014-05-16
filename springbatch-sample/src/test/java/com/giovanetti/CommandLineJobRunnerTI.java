@@ -6,10 +6,14 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+import org.junit.rules.TemporaryFolder;
 import org.springframework.batch.core.launch.support.CommandLineJobRunner;
 import org.springframework.batch.core.launch.support.ExitCodeMapper;
 
 public class CommandLineJobRunnerTI {
+
+    @ClassRule
+    public final static TemporaryFolder outputFile = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = new BatchProperties()
@@ -20,8 +24,9 @@ public class CommandLineJobRunnerTI {
                     "1"
             );
 
-    // TODO : special thanks
-    // http://www.stefan-birkner.de/system-rules/index.html
+    /**
+     * @see <a href="http://www.stefan-birkner.de/system-rules/index.html">System Rules</a>
+     */
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
@@ -33,8 +38,7 @@ public class CommandLineJobRunnerTI {
         CommandLineJobRunner.main(new String[]{
                 TestConfiguration.class.getName(),
                 JobConfiguration.JOB_NAME.toString(),
-                JobConfiguration.OUTPUT_FILE_PARAMETER + "=target/out/output"
-                        + System.currentTimeMillis() + ".txt"});
+                JobConfiguration.OUTPUT_FILE_PARAMETER + "=" + outputFile.getRoot().getPath()});
 
     }
 

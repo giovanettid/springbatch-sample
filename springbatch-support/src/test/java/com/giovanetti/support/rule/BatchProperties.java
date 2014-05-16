@@ -13,10 +13,9 @@ import java.util.List;
 
 public class BatchProperties extends ExternalResource {
 
+    //TODO : no target, use temp file
     private final static String TARGET_FOLDER_PATH = "target" + File.separator
             + "test-classes";
-
-    private final static String BATCH_PROPERTIES_NAME = "batch.properties";
 
     private File file;
 
@@ -44,7 +43,7 @@ public class BatchProperties extends ExternalResource {
 
     void create() {
         file = new File(TARGET_FOLDER_PATH + File.separator
-                + BATCH_PROPERTIES_NAME);
+                + "batch.properties");
         flush();
     }
 

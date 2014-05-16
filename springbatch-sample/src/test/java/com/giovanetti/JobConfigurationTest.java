@@ -5,6 +5,7 @@ import com.giovanetti.support.rule.BatchProperties;
 import com.google.common.collect.Iterables;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.*;
 import org.springframework.batch.test.JobLauncherTestUtils;
@@ -24,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class JobConfigurationTest {
 
-    private static final String OUTPUT_FILE_PATH = "target/out/output"
-            + System.currentTimeMillis() + ".txt";
+    @ClassRule
+    public final static TemporaryFolder outputFile = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = new BatchProperties()
@@ -58,17 +59,13 @@ public class JobConfigurationTest {
         // Act
         JobExecution jobExecution = jobLauncherTestUtils
                 .launchJob(new JobParametersBuilder().addString(JobConfiguration.OUTPUT_FILE_PARAMETER,
-                        OUTPUT_FILE_PATH).toJobParameters());
+                        outputFile.getRoot().getPath()).toJobParameters());
 
         // Assert
         assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
 
-        Collection<StepExecution> stepExecutions = jobExecution
-                .getStepExecutions();
-
-        assertThat(stepExecutions).hasSize(1);
-
-        StepExecution stepExecution = Iterables.getOnlyElement(stepExecutions);
+        StepExecution stepExecution = Iterables.getOnlyElement(jobExecution
+                .getStepExecutions());
         assertThat(stepExecution.getReadCount()).isEqualTo(2);
         assertThat(stepExecution.getWriteCount()).isEqualTo(2);
 

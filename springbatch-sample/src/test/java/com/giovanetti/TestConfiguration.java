@@ -17,8 +17,8 @@ public class TestConfiguration {
 
     @Bean
     public DataSourceInitializer functionalDataSourceInitializer(
-            @FunctionalDataSource DataSource functionalDatasource) {
-        return GenericTestConfiguration.createDataSourceInitializer(functionalDatasource,
+            @FunctionalDataSource DataSource functionalDataSource) {
+        return GenericTestConfiguration.createDataSourceInitializer(functionalDataSource,
                 GenericTestConfiguration.createDatabasePopulator(SQL_SCRIPTS));
     }
 

@@ -13,8 +13,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
-@PropertySource("classpath:batch.properties")
+@PropertySource("${" + ExternalConfiguration.BATCH_PROPERTIES_FILENAME + ":" + ExternalConfiguration.DEFAULT_BATCH_PROPERTIES + "}")
 public class ExternalConfiguration {
+
+    public static final String DEFAULT_BATCH_PROPERTIES = "classpath:batch.properties";
+
+    public static final String BATCH_PROPERTIES_FILENAME = "batch.properties.path";
 
     @Inject
     private Environment environment;
@@ -58,9 +62,8 @@ public class ExternalConfiguration {
 
         private final String name;
 
-        // TODO : check uncle bob for naming pArg...
-        private StepPropertyKeys(String pName) {
-            this.name = pName;
+        private StepPropertyKeys(String name) {
+            this.name = name;
         }
 
         @Override

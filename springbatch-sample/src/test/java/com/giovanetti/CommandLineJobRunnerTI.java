@@ -1,6 +1,5 @@
 package com.giovanetti;
 
-import com.giovanetti.support.ExternalConfiguration;
 import com.giovanetti.support.rule.BatchProperties;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -16,13 +15,7 @@ public class CommandLineJobRunnerTI {
     public final static TemporaryFolder outputFile = new TemporaryFolder();
 
     @ClassRule
-    public final static BatchProperties batchProperties = new BatchProperties()
-            .addTechnicalHsql()
-            .addFunctionalHsql()
-            .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
-                            .toString(),
-                    "1"
-            );
+    public final static BatchProperties batchProperties = BatchProperties.getDefault();
 
     /**
      * @see <a href="http://www.stefan-birkner.de/system-rules/index.html">System Rules</a>
@@ -35,10 +28,10 @@ public class CommandLineJobRunnerTI {
 
         exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_COMPLETED);
 
-        CommandLineJobRunner.main(new String[]{
-                TestConfiguration.class.getName(),
-                JobConfiguration.JOB_NAME.toString(),
-                JobConfiguration.OUTPUT_FILE_PARAMETER + "=" + outputFile.getRoot().getPath()});
+        CommandLineJobRunner.main(
+                new String[]{TestConfiguration.class.getName(), JobConfiguration.JOB_NAME.toString(), JobConfiguration.OUTPUT_FILE_PARAMETER + "=" + outputFile
+                        .getRoot()
+                        .getPath()});
 
     }
 
@@ -47,9 +40,8 @@ public class CommandLineJobRunnerTI {
 
         exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_GENERIC_ERROR);
 
-        CommandLineJobRunner.main(new String[]{
-                TestConfiguration.class.getName(),
-                JobConfiguration.JOB_NAME.toString()});
+        CommandLineJobRunner.main(
+                new String[]{TestConfiguration.class.getName(), JobConfiguration.JOB_NAME.toString()});
 
     }
 }

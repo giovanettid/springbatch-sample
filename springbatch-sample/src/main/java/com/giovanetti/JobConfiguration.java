@@ -26,12 +26,12 @@ import org.springframework.jdbc.core.SingleColumnRowMapper;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-//TODO : configure logs : switch logback ?
-//TODO : re package
+//TODO : configure logs : switch to logback ?
+//TODO : reorganize package
 //TODO : javadoc, changes.xml
-//TODO : checkstyle PMD
-//TODO : coverage
-//TODO : check pom.xml
+//TODO : check violations
+//TODO : check coverage
+//TODO : check pom.xml dependencies
 
 @Configuration
 @EnableBatchProcessing

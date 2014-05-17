@@ -4,51 +4,35 @@ import com.giovanetti.support.ExternalConfiguration;
 import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
 import com.giovanetti.support.ExternalConfiguration.DataSourceType;
 import org.apache.commons.io.FileUtils;
-import org.junit.rules.ExternalResource;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BatchProperties extends ExternalResource {
+public class BatchProperties extends TemporaryFolder {
 
-    //TODO : no target, use temp file
-    private final static String TARGET_FOLDER_PATH = "target" + File.separator
-            + "test-classes";
+    private BatchPropertiesPathSystemProperty pathSystemProperty = new BatchPropertiesPathSystemProperty();
 
-    private File file;
+    private File batchPropertiesFile;
 
     final private List<String> lines = new ArrayList<>();
 
     public static BatchProperties getDefault() {
         return new BatchProperties().addTechnicalHsql()
                 .addFunctionalHsql()
-                .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
-                                .toString(),
-                        "1"
-                );
+                .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL.toString(), "1");
 
     }
 
     @Override
     protected void before() throws Throwable {
-        create();
-    }
-
-    @Override
-    protected void after() {
-        delete();
-    }
-
-    void create() {
-        file = new File(TARGET_FOLDER_PATH + File.separator
-                + "batch.properties");
+        super.before();
+        batchPropertiesFile = newFile();
         flush();
-    }
-
-    void delete() {
-        file.delete();
+        pathSystemProperty.set(batchPropertiesFile.getPath());
+        pathSystemProperty.before();
     }
 
     public BatchProperties addFunctionalHsql() {
@@ -61,10 +45,8 @@ public class BatchProperties extends ExternalResource {
     }
 
     BatchProperties addHsql(DataSourceType dataSourceType) {
-        return this.add(DataSourcePropertyKeys.DRIVER_CLASS.name(dataSourceType),
-                "org.hsqldb.jdbcDriver")
-                .add(DataSourcePropertyKeys.URL.name(dataSourceType),
-                        "jdbc:hsqldb:mem:" + dataSourceType)
+        return this.add(DataSourcePropertyKeys.DRIVER_CLASS.name(dataSourceType), "org.hsqldb.jdbcDriver")
+                .add(DataSourcePropertyKeys.URL.name(dataSourceType), "jdbc:hsqldb:mem:" + dataSourceType)
                 .add(DataSourcePropertyKeys.USERNAME.name(dataSourceType), "sa")
                 .add(DataSourcePropertyKeys.PASSWORD.name(dataSourceType), "");
     }
@@ -76,7 +58,7 @@ public class BatchProperties extends ExternalResource {
 
     private void flush() {
         try {
-            FileUtils.writeLines(file, lines);
+            FileUtils.writeLines(batchPropertiesFile, lines);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

@@ -1,8 +1,5 @@
 package com.giovanetti.support;
 
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
 import com.giovanetti.support.annotations.CommitInterval;
 import com.giovanetti.support.annotations.FunctionalDataSource;
 import com.giovanetti.support.annotations.TechnicalDataSource;
@@ -12,13 +9,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import javax.inject.Inject;
+import javax.sql.DataSource;
+
 @Configuration
-@PropertySource("${" + ExternalConfiguration.BATCH_PROPERTIES_FILENAME + ":" + ExternalConfiguration.DEFAULT_BATCH_PROPERTIES + "}")
+@PropertySource("${" + ExternalConfiguration.BATCH_PROPERTIES_PATH + "}")
 public class ExternalConfiguration {
 
-    public static final String DEFAULT_BATCH_PROPERTIES = "classpath:batch.properties";
-
-    public static final String BATCH_PROPERTIES_FILENAME = "batch.properties.path";
+    public static final String BATCH_PROPERTIES_PATH = "batch.properties.path";
 
     @Inject
     private Environment environment;
@@ -34,8 +32,7 @@ public class ExternalConfiguration {
 
     public enum DataSourcePropertyKeys {
 
-        DRIVER_CLASS("driverclassname"), URL("url"), USERNAME("username"), PASSWORD(
-                "password");
+        DRIVER_CLASS("driverclassname"), URL("url"), USERNAME("username"), PASSWORD("password");
 
         private final static String PREFIX = "ds";
 
@@ -76,9 +73,7 @@ public class ExternalConfiguration {
     @Bean
     @CommitInterval
     Integer commitInterval() {
-        return Integer.parseInt(environment
-                .getProperty(StepPropertyKeys.COMMIT_INTERVAL
-                        .toString()));
+        return Integer.parseInt(environment.getProperty(StepPropertyKeys.COMMIT_INTERVAL.toString()));
     }
 
     @Bean
@@ -95,15 +90,10 @@ public class ExternalConfiguration {
 
     private DataSource createDataSource(DataSourceType dataSourceType) {
         DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName(environment
-                .getProperty(DataSourcePropertyKeys.DRIVER_CLASS
-                        .name(dataSourceType)));
-        ds.setUrl(environment.getProperty(DataSourcePropertyKeys.URL
-                .name(dataSourceType)));
-        ds.setUsername(environment.getProperty(DataSourcePropertyKeys.USERNAME
-                .name(dataSourceType)));
-        ds.setPassword(environment.getProperty(DataSourcePropertyKeys.PASSWORD
-                .name(dataSourceType)));
+        ds.setDriverClassName(environment.getProperty(DataSourcePropertyKeys.DRIVER_CLASS.name(dataSourceType)));
+        ds.setUrl(environment.getProperty(DataSourcePropertyKeys.URL.name(dataSourceType)));
+        ds.setUsername(environment.getProperty(DataSourcePropertyKeys.USERNAME.name(dataSourceType)));
+        ds.setPassword(environment.getProperty(DataSourcePropertyKeys.PASSWORD.name(dataSourceType)));
         return ds;
     }
 

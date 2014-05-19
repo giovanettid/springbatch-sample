@@ -1,4 +1,4 @@
-package com.giovanetti.support.annotations;
+package com.giovanetti.support.batch.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +10,6 @@ import javax.inject.Qualifier;
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
-public @interface TechnicalDataSource {
+public @interface FunctionalDataSource {
 
 }

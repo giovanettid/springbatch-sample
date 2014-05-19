@@ -1,7 +1,8 @@
-package com.giovanetti;
+package com.giovanetti.sample.batch.job;
 
-import com.giovanetti.support.function.JdbcCursorItemReaderSupplier;
-import com.giovanetti.support.rule.BatchProperties;
+import com.giovanetti.sample.batch.configuration.TestConfiguration;
+import com.giovanetti.support.batch.function.JdbcCursorItemReaderSupplier;
+import com.giovanetti.support.batch.rule.BatchProperties;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

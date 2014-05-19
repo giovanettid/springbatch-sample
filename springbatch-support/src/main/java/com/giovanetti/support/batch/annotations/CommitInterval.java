@@ -1,4 +1,4 @@
-package com.giovanetti.support.annotations;
+package com.giovanetti.support.batch.annotations;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.ElementType;

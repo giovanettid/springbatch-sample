@@ -1,7 +1,8 @@
-package com.giovanetti;
+package com.giovanetti.sample.batch.job;
 
-import com.giovanetti.support.function.FlatFileItemWriterConsumer;
-import com.giovanetti.support.rule.BatchProperties;
+import com.giovanetti.sample.batch.configuration.TestConfiguration;
+import com.giovanetti.support.batch.function.FlatFileItemWriterConsumer;
+import com.giovanetti.support.batch.rule.BatchProperties;
 import org.assertj.core.util.Lists;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -36,7 +37,7 @@ public class FlatFileWriterTest {
     public static StepExecution getStepExecution() {
         return MetaDataInstanceFactory
                 .createStepExecution(new JobParametersBuilder()
-                        .addString(JobConfiguration.OUTPUT_FILE_PARAMETER, outputFile.getRoot().getPath())
+                        .addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER, outputFile.getRoot().getPath())
                         .toJobParameters());
     }
 

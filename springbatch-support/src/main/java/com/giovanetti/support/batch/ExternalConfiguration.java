@@ -1,8 +1,8 @@
-package com.giovanetti.support;
+package com.giovanetti.support.batch;
 
-import com.giovanetti.support.annotations.CommitInterval;
-import com.giovanetti.support.annotations.FunctionalDataSource;
-import com.giovanetti.support.annotations.TechnicalDataSource;
+import com.giovanetti.support.batch.annotations.CommitInterval;
+import com.giovanetti.support.batch.annotations.FunctionalDataSource;
+import com.giovanetti.support.batch.annotations.TechnicalDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;

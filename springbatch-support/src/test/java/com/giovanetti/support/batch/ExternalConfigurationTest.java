@@ -1,10 +1,11 @@
-package com.giovanetti.support;
+package com.giovanetti.support.batch;
 
-import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
-import com.giovanetti.support.ExternalConfiguration.DataSourceType;
-import com.giovanetti.support.annotations.FunctionalDataSource;
-import com.giovanetti.support.annotations.TechnicalDataSource;
-import com.giovanetti.support.rule.BatchProperties;
+import com.giovanetti.support.batch.ExternalConfiguration;
+import com.giovanetti.support.batch.ExternalConfiguration.DataSourcePropertyKeys;
+import com.giovanetti.support.batch.ExternalConfiguration.DataSourceType;
+import com.giovanetti.support.batch.annotations.FunctionalDataSource;
+import com.giovanetti.support.batch.annotations.TechnicalDataSource;
+import com.giovanetti.support.batch.rule.BatchProperties;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

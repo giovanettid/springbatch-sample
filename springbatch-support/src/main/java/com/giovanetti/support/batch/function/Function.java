@@ -1,4 +1,4 @@
-package com.giovanetti.support.function;
+package com.giovanetti.support.batch.function;
 
 @FunctionalInterface
 public interface Function<T,R> {

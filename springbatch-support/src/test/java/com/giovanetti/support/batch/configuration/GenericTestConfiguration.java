@@ -1,7 +1,7 @@
-package com.giovanetti.support.configuration;
+package com.giovanetti.support.batch.configuration;
 
-import com.giovanetti.support.annotations.FunctionalDataSource;
-import com.giovanetti.support.annotations.TechnicalDataSource;
+import com.giovanetti.support.batch.annotations.FunctionalDataSource;
+import com.giovanetti.support.batch.annotations.TechnicalDataSource;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

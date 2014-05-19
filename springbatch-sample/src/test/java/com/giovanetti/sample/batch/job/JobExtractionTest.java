@@ -1,7 +1,8 @@
-package com.giovanetti;
+package com.giovanetti.sample.batch.job;
 
-import com.giovanetti.support.ExternalConfiguration;
-import com.giovanetti.support.rule.BatchProperties;
+import com.giovanetti.sample.batch.configuration.TestConfiguration;
+import com.giovanetti.support.batch.ExternalConfiguration;
+import com.giovanetti.support.batch.rule.BatchProperties;
 import com.google.common.collect.Iterables;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class JobConfigurationTest {
+public class JobExtractionTest {
 
     @ClassRule
     public final static TemporaryFolder outputFile = new TemporaryFolder();
@@ -53,11 +54,11 @@ public class JobConfigurationTest {
     }
 
     @Test
-    public void jobExtractionOK() throws Exception {
+    public void jobExtraction() throws Exception {
 
         // Act
         JobExecution jobExecution = jobLauncherTestUtils
-                .launchJob(new JobParametersBuilder().addString(JobConfiguration.OUTPUT_FILE_PARAMETER,
+                .launchJob(new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
                         outputFile.getRoot().getPath()).toJobParameters());
 
         // Assert
@@ -71,7 +72,7 @@ public class JobConfigurationTest {
     }
 
     @Test(expected = JobParametersInvalidException.class)
-    public void jobExtraction_ParametreInvalide_KO() throws Exception {
+    public void jobExtraction_SiParametreInvalide_AlorsException() throws Exception {
         jobLauncherTestUtils.launchJob();
     }
 

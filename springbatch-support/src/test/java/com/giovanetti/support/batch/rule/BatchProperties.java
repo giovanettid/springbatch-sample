@@ -1,8 +1,8 @@
-package com.giovanetti.support.rule;
+package com.giovanetti.support.batch.rule;
 
-import com.giovanetti.support.ExternalConfiguration;
-import com.giovanetti.support.ExternalConfiguration.DataSourcePropertyKeys;
-import com.giovanetti.support.ExternalConfiguration.DataSourceType;
+import com.giovanetti.support.batch.ExternalConfiguration;
+import com.giovanetti.support.batch.ExternalConfiguration.DataSourcePropertyKeys;
+import com.giovanetti.support.batch.ExternalConfiguration.DataSourceType;
 import org.apache.commons.io.FileUtils;
 import org.junit.rules.TemporaryFolder;
 

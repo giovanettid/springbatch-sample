@@ -1,6 +1,7 @@
-package com.giovanetti;
+package com.giovanetti.sample.batch.job;
 
-import com.giovanetti.support.rule.BatchProperties;
+import com.giovanetti.sample.batch.configuration.TestConfiguration;
+import com.giovanetti.support.batch.rule.BatchProperties;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,19 +30,19 @@ public class CommandLineJobRunnerTI {
         exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_COMPLETED);
 
         CommandLineJobRunner.main(
-                new String[]{TestConfiguration.class.getName(), JobConfiguration.JOB_NAME.toString(), JobConfiguration.OUTPUT_FILE_PARAMETER + "=" + outputFile
+                new String[]{TestConfiguration.class.getName(), JobExtractionConfiguration.JOB_NAME.toString(), JobExtractionConfiguration.OUTPUT_FILE_PARAMETER + "=" + outputFile
                         .getRoot()
                         .getPath()});
 
     }
 
     @Test
-    public void runKO() throws Exception {
+    public void run_SiParametreInvalide_AlorsExitWithError() throws Exception {
 
         exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_GENERIC_ERROR);
 
         CommandLineJobRunner.main(
-                new String[]{TestConfiguration.class.getName(), JobConfiguration.JOB_NAME.toString()});
+                new String[]{TestConfiguration.class.getName(), JobExtractionConfiguration.JOB_NAME.toString()});
 
     }
 }

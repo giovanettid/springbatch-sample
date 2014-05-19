@@ -1,6 +1,6 @@
-package com.giovanetti.support.rule;
+package com.giovanetti.support.batch.rule;
 
-import com.giovanetti.support.ExternalConfiguration;
+import com.giovanetti.support.batch.ExternalConfiguration;
 import org.junit.contrib.java.lang.system.ProvideSystemProperty;
 
 class BatchPropertiesPathSystemProperty extends ProvideSystemProperty {

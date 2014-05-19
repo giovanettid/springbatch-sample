@@ -1,9 +1,9 @@
-package com.giovanetti;
+package com.giovanetti.sample.batch.job;
 
-import com.giovanetti.support.CustomBatchConfigurer;
-import com.giovanetti.support.annotations.CommitInterval;
-import com.giovanetti.support.annotations.FunctionalDataSource;
-import com.giovanetti.support.ExternalConfiguration;
+import com.giovanetti.support.batch.CustomBatchConfigurer;
+import com.giovanetti.support.batch.annotations.CommitInterval;
+import com.giovanetti.support.batch.annotations.FunctionalDataSource;
+import com.giovanetti.support.batch.ExternalConfiguration;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.Step;
@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 //TODO : configure logs : switch to logback ?
-//TODO : reorganize package
 //TODO : javadoc, changes.xml
 //TODO : check violations
 //TODO : check coverage
@@ -36,7 +35,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableBatchProcessing
 @Import({ExternalConfiguration.class, CustomBatchConfigurer.class})
-public class JobConfiguration {
+public class JobExtractionConfiguration {
 
     public final static String JOB_NAME = "extractionJob";
     public final static String STEP_NAME = "jdbcToFileStep";

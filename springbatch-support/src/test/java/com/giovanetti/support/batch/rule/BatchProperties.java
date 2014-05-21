@@ -13,7 +13,7 @@ import java.util.List;
 
 public class BatchProperties extends TemporaryFolder {
 
-    private BatchPropertiesPathSystemProperty pathSystemProperty = new BatchPropertiesPathSystemProperty();
+    private final BatchPropertiesPathSystemProperty pathSystemProperty = new BatchPropertiesPathSystemProperty();
 
     private File batchPropertiesFile;
 

@@ -4,6 +4,7 @@ import com.giovanetti.support.batch.CustomBatchConfigurer;
 import com.giovanetti.support.batch.annotations.CommitInterval;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.giovanetti.support.batch.ExternalConfiguration;
+import com.giovanetti.support.batch.item.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.Step;
@@ -14,6 +15,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.DefaultJobParametersValidator;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.jdbc.core.SingleColumnRowMapper;
+import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -58,44 +60,43 @@ public class JobExtractionConfiguration {
 
     @Bean
     JobParametersValidator jobParametersValidator() {
-        return new DefaultJobParametersValidator(
-                new String[]{OUTPUT_FILE_PARAMETER}, new String[]{});
+        return new DefaultJobParametersValidator(new String[]{OUTPUT_FILE_PARAMETER}, new String[]{});
     }
 
     @Bean(name = JOB_NAME)
     Job job() {
-        return jobBuilders.get(JOB_NAME).validator(jobParametersValidator())
-                .start(step()).build();
+        return jobBuilders.get(JOB_NAME).validator(jobParametersValidator()).start(step()).build();
     }
 
     @Bean(name = STEP_NAME)
     Step step() {
-        return stepBuilders
-                .get(STEP_NAME)
+        return stepBuilders.get(STEP_NAME)
                 .transactionManager(new ResourcelessTransactionManager())
-                .<String, String>chunk(commitInterval).reader(reader())
-                .writer(writer(null)).build();
+                .<User, User>chunk(commitInterval)
+                .reader(reader())
+                .writer(writer(null))
+                .build();
     }
 
     @Bean
-    JdbcCursorItemReader<String> reader() {
-        JdbcCursorItemReader<String> jdbcCursorItemReader = new JdbcCursorItemReader<>();
+    JdbcCursorItemReader<User> reader() {
+        JdbcCursorItemReader<User> jdbcCursorItemReader = new JdbcCursorItemReader<>();
         jdbcCursorItemReader.setDataSource(dataSource);
-        // TODO extract all columns => bean User
-        jdbcCursorItemReader.setSql("select ID from USER");
-        SingleColumnRowMapper<String> rowMapper = new SingleColumnRowMapper<>();
-        rowMapper.setRequiredType(String.class);
+        jdbcCursorItemReader.setSql("select ID,PRENOM,NOM from USER");
+        ParameterizedBeanPropertyRowMapper<User> rowMapper = ParameterizedBeanPropertyRowMapper.newInstance(User.class);
         jdbcCursorItemReader.setRowMapper(rowMapper);
         return jdbcCursorItemReader;
     }
 
     @Bean
     @StepScope
-    FlatFileItemWriter<String> writer(@Value("#{jobParameters['"
-            + OUTPUT_FILE_PARAMETER + "']}") String path) {
-        FlatFileItemWriter<String> flatFileItemWriter = new FlatFileItemWriter<>();
-        DelimitedLineAggregator<String> lineAggregator = new DelimitedLineAggregator<>();
+    FlatFileItemWriter<User> writer(@Value("#{jobParameters['" + OUTPUT_FILE_PARAMETER + "']}") String path) {
+        FlatFileItemWriter<User> flatFileItemWriter = new FlatFileItemWriter<>();
+        DelimitedLineAggregator<User> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(",");
+        BeanWrapperFieldExtractor<User> fieldExtractor = new BeanWrapperFieldExtractor<>();
+        fieldExtractor.setNames(new String[]{"id", "prenom", "nom"});
+        lineAggregator.setFieldExtractor(fieldExtractor);
         flatFileItemWriter.setLineAggregator(lineAggregator);
         flatFileItemWriter.setResource(new FileSystemResource(path));
         return flatFileItemWriter;

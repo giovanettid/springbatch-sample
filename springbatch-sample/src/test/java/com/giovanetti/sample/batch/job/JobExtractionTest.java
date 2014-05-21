@@ -29,12 +29,9 @@ public class JobExtractionTest {
     public final static TemporaryFolder outputFile = new TemporaryFolder();
 
     @ClassRule
-    public final static BatchProperties batchProperties = new BatchProperties()
-            .addTechnicalHsql()
+    public final static BatchProperties batchProperties = new BatchProperties().addTechnicalHsql()
             .addFunctionalHsql()
-            .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL
-                            .toString(),
-                    "1"
+            .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL.toString(), "1"
             );
 
     @Inject
@@ -47,9 +44,7 @@ public class JobExtractionTest {
     public void databaseInitialisationOK() {
 
         // Act & Assert
-        assertThat(
-                jdbcTemplate.queryForObject("select count(*) from USER",
-                        Integer.class)
+        assertThat(jdbcTemplate.queryForObject("select count(*) from USER", Integer.class)
         ).isEqualTo(2);
     }
 
@@ -57,15 +52,14 @@ public class JobExtractionTest {
     public void jobExtraction() throws Exception {
 
         // Act
-        JobExecution jobExecution = jobLauncherTestUtils
-                .launchJob(new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
+        JobExecution jobExecution = jobLauncherTestUtils.launchJob(
+                new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
                         outputFile.getRoot().getPath()).toJobParameters());
 
         // Assert
         assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
 
-        StepExecution stepExecution = Iterables.getOnlyElement(jobExecution
-                .getStepExecutions());
+        StepExecution stepExecution = Iterables.getOnlyElement(jobExecution.getStepExecutions());
         assertThat(stepExecution.getReadCount()).isEqualTo(2);
         assertThat(stepExecution.getWriteCount()).isEqualTo(2);
 

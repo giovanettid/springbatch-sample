@@ -2,8 +2,8 @@ package com.giovanetti.sample.batch.job;
 
 import com.giovanetti.sample.batch.configuration.TestConfiguration;
 import com.giovanetti.support.batch.function.FlatFileItemWriterConsumer;
+import com.giovanetti.support.batch.item.User;
 import com.giovanetti.support.batch.rule.BatchProperties;
-import org.assertj.core.util.Lists;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -24,21 +24,22 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import javax.inject.Inject;
 import java.io.IOException;
 
+import static com.giovanetti.sample.batch.item.ItemHelper.listOf2UsersMapFromDB;
 import static java.nio.file.Files.readAllLines;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-        StepScopeTestExecutionListener.class, DirtiesContextTestExecutionListener.class})
+@TestExecutionListeners(
+        {DependencyInjectionTestExecutionListener.class, StepScopeTestExecutionListener.class, DirtiesContextTestExecutionListener.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class FlatFileWriterTest {
 
     public static StepExecution getStepExecution() {
-        return MetaDataInstanceFactory
-                .createStepExecution(new JobParametersBuilder()
-                        .addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER, outputFile.getRoot().getPath())
-                        .toJobParameters());
+        return MetaDataInstanceFactory.createStepExecution(
+                new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
+                        outputFile.getRoot().getPath()).toJobParameters()
+        );
     }
 
     @ClassRule
@@ -48,18 +49,18 @@ public class FlatFileWriterTest {
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
 
     @Inject
-    private FlatFileItemWriter<String> itemWriter;
+    private FlatFileItemWriter<User> itemWriter;
 
     @Test
     public void write() throws IOException {
 
         // Act
-        FlatFileItemWriterConsumer.accept(itemWriter, Lists.newArrayList("1", "2"), itemWriter::write);
+        FlatFileItemWriterConsumer.accept(itemWriter, listOf2UsersMapFromDB(), itemWriter::write);
 
         // Assert
         assertThat(readAllLines(outputFile.getRoot().toPath()))
                 .hasSize(2)
-                .containsExactly("1", "2");
+                .contains("1,prenom1,nom1", "2,prenom2,nom2");
 
     }
 

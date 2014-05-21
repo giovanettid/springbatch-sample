@@ -1,4 +1,4 @@
-package com.giovanetti.support.batch.item;
+package com.giovanetti.sample.batch.item;
 
 public class User {
 

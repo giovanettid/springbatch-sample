@@ -2,7 +2,7 @@ package com.giovanetti.sample.batch.job;
 
 import com.giovanetti.sample.batch.configuration.TestConfiguration;
 import com.giovanetti.support.batch.function.FlatFileItemWriterConsumer;
-import com.giovanetti.support.batch.item.User;
+import com.giovanetti.sample.batch.item.User;
 import com.giovanetti.support.batch.rule.BatchProperties;
 import org.junit.ClassRule;
 import org.junit.Test;

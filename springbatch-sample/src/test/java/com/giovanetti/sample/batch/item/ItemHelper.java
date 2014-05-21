@@ -1,7 +1,5 @@
 package com.giovanetti.sample.batch.item;
 
-import com.giovanetti.support.batch.item.User;
-
 import java.util.Arrays;
 import java.util.List;
 

@@ -4,7 +4,7 @@ import com.giovanetti.support.batch.CustomBatchConfigurer;
 import com.giovanetti.support.batch.annotations.CommitInterval;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.giovanetti.support.batch.ExternalConfiguration;
-import com.giovanetti.support.batch.item.User;
+import com.giovanetti.sample.batch.item.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.Step;

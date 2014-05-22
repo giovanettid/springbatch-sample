@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 @Import({JobExtractionConfiguration.class, GenericTestConfiguration.class})
 public class TestConfiguration {
 
-    public final static String[] SQL_SCRIPTS = {"schema-functional.sql", "users.sql"};
+    private final static String[] SQL_SCRIPTS = {"schema-functional.sql", "users.sql"};
 
     @Bean
     public DataSourceInitializer functionalDataSourceInitializer(

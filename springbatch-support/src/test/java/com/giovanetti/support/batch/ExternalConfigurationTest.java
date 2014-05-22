@@ -1,6 +1,5 @@
 package com.giovanetti.support.batch;
 
-import com.giovanetti.support.batch.ExternalConfiguration;
 import com.giovanetti.support.batch.ExternalConfiguration.DataSourcePropertyKeys;
 import com.giovanetti.support.batch.ExternalConfiguration.DataSourceType;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;

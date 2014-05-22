@@ -1,8 +1,6 @@
 package com.giovanetti.support.batch;
 
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
+import com.giovanetti.support.batch.annotations.TechnicalDataSource;
 import com.giovanetti.support.batch.function.Consumer;
 import com.giovanetti.support.batch.function.Function;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
@@ -14,7 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.giovanetti.support.batch.annotations.TechnicalDataSource;
+import javax.inject.Inject;
+import javax.sql.DataSource;
 
 @Configuration
 public class CustomBatchConfigurer implements BatchConfigurer {
@@ -29,9 +28,8 @@ public class CustomBatchConfigurer implements BatchConfigurer {
         factoryBean.setDataSource(dataSource);
         factoryBean.setTransactionManager(getTransactionManager());
         Consumer.acceptAndAvoidRawExceptionType(factoryBean, JobRepositoryFactoryBean::afterPropertiesSet);
-        return Function.applyAndAvoidRawExceptionType(factoryBean, (JobRepositoryFactoryBean factory) -> {
-            return (JobRepository) factoryBean.getObject();
-        });
+        return Function.applyAndAvoidRawExceptionType(factoryBean,
+                (JobRepositoryFactoryBean factory) -> factoryBean.getObject());
     }
 
     @Override

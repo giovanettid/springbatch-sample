@@ -1,13 +1,12 @@
 package com.giovanetti.sample.batch.job;
 
 import com.giovanetti.sample.batch.configuration.TestConfiguration;
-import com.giovanetti.support.batch.function.JdbcCursorItemReaderSupplier;
 import com.giovanetti.sample.batch.item.User;
 import com.giovanetti.support.batch.rule.BatchProperties;
+import com.giovanetti.support.batch.template.ItemReaderTemplate;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,12 +26,12 @@ public class JdbcCursorItemReaderTest {
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
 
     @Inject
-    private JdbcCursorItemReader<User> itemReader;
+    private ItemReaderTemplate<User> itemReader;
 
     @Test
     public void read() {
 
-        assertThat(JdbcCursorItemReaderSupplier.get(itemReader, itemReader::read)).isNotEmpty()
+        assertThat(itemReader.readAll()).isNotEmpty()
                 .hasSize(2)
                 .usingFieldByFieldElementComparator()
                 .containsAll(listOf2UsersMapFromDB());

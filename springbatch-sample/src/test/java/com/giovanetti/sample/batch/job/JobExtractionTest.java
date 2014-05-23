@@ -31,8 +31,7 @@ public class JobExtractionTest {
     @ClassRule
     public final static BatchProperties batchProperties = new BatchProperties().addTechnicalHsql()
             .addFunctionalHsql()
-            .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL.toString(), "1"
-            );
+            .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL.toString(), "1");
 
     @Inject
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -44,8 +43,7 @@ public class JobExtractionTest {
     public void databaseInitialisationOK() {
 
         // Act & Assert
-        assertThat(jdbcTemplate.queryForObject("select count(*) from USER", Integer.class)
-        ).isEqualTo(2);
+        assertThat(jdbcTemplate.queryForObject("select count(*) from USER", Integer.class)).isEqualTo(2);
     }
 
     @Test
@@ -54,7 +52,8 @@ public class JobExtractionTest {
         // Act
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(
                 new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
-                        outputFile.getRoot().getPath()).toJobParameters());
+                        outputFile.getRoot().getPath()).toJobParameters()
+        );
 
         // Assert
         assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);

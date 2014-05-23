@@ -1,16 +1,15 @@
 package com.giovanetti.sample.batch.job;
 
 import com.giovanetti.sample.batch.configuration.TestConfiguration;
-import com.giovanetti.support.batch.function.FlatFileItemWriterConsumer;
 import com.giovanetti.sample.batch.item.User;
 import com.giovanetti.support.batch.rule.BatchProperties;
+import com.giovanetti.support.batch.template.ItemWriterTemplate;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.batch.test.StepScopeTestExecutionListener;
 import org.springframework.test.annotation.DirtiesContext;
@@ -49,13 +48,13 @@ public class FlatFileWriterTest {
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
 
     @Inject
-    private FlatFileItemWriter<User> itemWriter;
+    private ItemWriterTemplate<User> itemWriter;
 
     @Test
     public void write() throws IOException {
 
         // Act
-        FlatFileItemWriterConsumer.accept(itemWriter, listOf2UsersMapFromDB(), itemWriter::write);
+        itemWriter.write(listOf2UsersMapFromDB());
 
         // Assert
         assertThat(readAllLines(outputFile.getRoot().toPath()))

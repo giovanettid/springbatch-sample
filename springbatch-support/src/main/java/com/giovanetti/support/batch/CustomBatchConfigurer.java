@@ -8,6 +8,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -27,9 +28,8 @@ public class CustomBatchConfigurer implements BatchConfigurer {
         JobRepositoryFactoryBean factoryBean = new JobRepositoryFactoryBean();
         factoryBean.setDataSource(dataSource);
         factoryBean.setTransactionManager(getTransactionManager());
-        Consumer.acceptAndAvoidRawExceptionType(factoryBean, JobRepositoryFactoryBean::afterPropertiesSet);
-        return Function.applyAndAvoidRawExceptionType(factoryBean,
-                (JobRepositoryFactoryBean factory) -> factoryBean.getObject());
+        Consumer.acceptWithRawException(factoryBean, JobRepositoryFactoryBean::afterPropertiesSet);
+        return Function.applyWithRawException(factoryBean, FactoryBean::getObject);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CustomBatchConfigurer implements BatchConfigurer {
     public JobLauncher getJobLauncher() {
         SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setJobRepository(getJobRepository());
-        Consumer.acceptAndAvoidRawExceptionType(jobLauncher, SimpleJobLauncher::afterPropertiesSet);
+        Consumer.acceptWithRawException(jobLauncher, SimpleJobLauncher::afterPropertiesSet);
         return jobLauncher;
     }
 

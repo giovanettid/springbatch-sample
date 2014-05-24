@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @Configuration
@@ -22,19 +21,13 @@ public class TestConfiguration {
 
     private final static String[] SQL_SCRIPTS = {"schema-functional.sql", "users.sql"};
 
-    @Inject
-    private JdbcCursorItemReader<User> itemReader;
-
-    @Inject
-    private FlatFileItemWriter<User> itemWriter;
-
     @Bean
-    ItemReaderTemplate<User> itemReaderTemplate() {
+    ItemReaderTemplate<User> itemReaderTemplate(JdbcCursorItemReader<User> itemReader) {
         return new ItemReaderTemplate<>(itemReader);
     }
 
     @Bean
-    ItemWriterTemplate<User> itemWriterTemplate() {
+    ItemWriterTemplate<User> itemWriterTemplate(FlatFileItemWriter<User> itemWriter) {
         return new ItemWriterTemplate<>(itemWriter);
     }
 

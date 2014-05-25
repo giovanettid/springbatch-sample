@@ -41,8 +41,6 @@ public class JobExtractionTest {
 
     @Test
     public void databaseInitialisationOK() {
-
-        // Act & Assert
         assertThat(jdbcTemplate.queryForObject("select count(*) from USER", Integer.class)).isEqualTo(2);
     }
 

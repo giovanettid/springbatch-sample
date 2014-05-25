@@ -16,6 +16,17 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+/**
+ * Nécessaire pour gérer une datasource fonctionelle séparée de la datasource technique spring batch.
+ * Rempli le contrat de {@link org.springframework.batch.core.configuration.annotation.BatchConfigurer}
+ * pour la datasource technique.
+ * Utiliser le qualifier {@link com.giovanetti.support.batch.annotations.FunctionalDataSource}
+ * pour injecter la datasource fonctionnelle.
+ * Utiliser le qualifier {@link com.giovanetti.support.batch.annotations.TechnicalDataSource}
+ * pour injecter la datasource technique.
+ *
+ * @see {@link org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer}
+ */
 @Configuration
 public class CustomBatchConfigurer implements BatchConfigurer {
 

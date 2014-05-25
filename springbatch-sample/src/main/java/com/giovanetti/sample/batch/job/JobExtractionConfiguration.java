@@ -27,8 +27,8 @@ import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
-
-//TODO : javadoc, changes.xml
+//TODO : javadoc support test
+//TODO : changes.xml, README.md
 
 @Configuration
 @EnableBatchProcessing

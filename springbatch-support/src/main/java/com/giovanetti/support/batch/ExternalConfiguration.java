@@ -12,6 +12,13 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+/**
+ * Décrit les ressources et propriétés fournies par l'environnement.
+ * Un fichier de properties doit être fourni par l'environnement.
+ * Utiliser l'option de démarrage {@link #BATCH_PROPERTIES_PATH} pour donner le chemin du fichier de properties.
+ * Le chemin doit être préfixé par file: ou bien classpath:
+ * selon que le répertoire du fichier de properties fait partie du classpath ou non.
+ */
 @Configuration
 @PropertySource("${" + ExternalConfiguration.BATCH_PROPERTIES_PATH + "}")
 public class ExternalConfiguration {

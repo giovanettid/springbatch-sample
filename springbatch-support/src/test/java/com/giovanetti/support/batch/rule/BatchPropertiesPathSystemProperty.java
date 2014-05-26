@@ -3,6 +3,10 @@ package com.giovanetti.support.batch.rule;
 import com.giovanetti.support.batch.ExternalConfiguration;
 import org.junit.contrib.java.lang.system.ProvideSystemProperty;
 
+/**
+ * Rule Junit pour fournir la propriété système correspondante
+ * à l'emplacement du fichier de propriétés du batch pendant les tests.
+ */
 class BatchPropertiesPathSystemProperty extends ProvideSystemProperty {
 
     BatchPropertiesPathSystemProperty() {

@@ -2,7 +2,7 @@ package com.giovanetti.support.batch.function;
 
 /**
  * Interface créée pour palier aux signatures de méthode spring déclarant l'exception brute java.lang.Exception.
- * Permet de renvoyer Une exception runtime à la place.
+ * Permet de renvoyer une exception runtime à la place.
  *
  * @see {@link org.springframework.beans.factory.FactoryBean#getObject()}
  */

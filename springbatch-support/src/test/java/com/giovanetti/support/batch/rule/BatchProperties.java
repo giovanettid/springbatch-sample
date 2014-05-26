@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Rule Junit pour fournir un fichier de propriétés temporaire pendant les tests.
+ */
 public class BatchProperties extends TemporaryFolder {
 
     private final BatchPropertiesPathSystemProperty pathSystemProperty = new BatchPropertiesPathSystemProperty();

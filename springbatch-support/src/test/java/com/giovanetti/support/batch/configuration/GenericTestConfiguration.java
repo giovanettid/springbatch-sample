@@ -19,16 +19,6 @@ public class GenericTestConfiguration {
             "org/springframework/batch/core/schema-hsqldb.sql"};
 
     @Bean
-    public DataSourceInitializer technicalDataSourceInitializer(
-            @TechnicalDataSource DataSource technicalDatasource) {
-        return createDataSourceInitializer(
-                technicalDatasource,
-                createDatabasePopulator(
-                        HSQL_SCRIPTS)
-        );
-    }
-
-    @Bean
     public JobLauncherTestUtils jobLauncherTestUtils() {
         return new JobLauncherTestUtils();
     }
@@ -37,6 +27,16 @@ public class GenericTestConfiguration {
     public JdbcTemplate jdbcTemplate(
             @FunctionalDataSource DataSource dataSource) {
         return new JdbcTemplate(dataSource);
+    }
+
+    @Bean
+    public DataSourceInitializer technicalDataSourceInitializer(
+            @TechnicalDataSource DataSource technicalDatasource) {
+        return createDataSourceInitializer(
+                technicalDatasource,
+                createDatabasePopulator(
+                        HSQL_SCRIPTS)
+        );
     }
 
     public static ResourceDatabasePopulator createDatabasePopulator(String... paths) {

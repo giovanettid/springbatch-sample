@@ -6,6 +6,13 @@ import org.springframework.batch.item.ItemStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Facilite les tests des composants reader d'une step.
+ * Masque les appels de méthodes à effectuer pour effectuer des lectures
+ * sans passer par une step.
+ *
+ * @param <T> type generique pour un item reader
+ */
 public class ItemReaderTemplate<T> {
 
     private final ItemStreamReader<T> itemReader;

@@ -4,6 +4,13 @@ import org.springframework.batch.item.*;
 
 import java.util.List;
 
+/**
+ * Facilite les tests des composants writer d'une step.
+ * Masque les appels de méthodes à effectuer pour effectuer des écritures
+ * sans passer par une step.
+ *
+ * @param <T> type generique pour un item writer
+ */
 public class ItemWriterTemplate<T> {
 
     private final ItemStreamWriter<T> itemWriter;

@@ -15,6 +15,14 @@
         <level value="INFO"/>
     </logger>
 
+    <logger name="org.springframework.jdbc.datasource.init">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="com.giovanetti.support.batch.rule.DBUnitRule">
+        <level value="INFO"/>
+    </logger>
+
     <root level="warn">
         <appender-ref ref="STDOUT"/>
     </root>

@@ -2,6 +2,7 @@ package com.giovanetti.sample.batch.job;
 
 import com.giovanetti.sample.batch.configuration.TestConfiguration;
 import com.giovanetti.support.batch.rule.BatchProperties;
+import com.giovanetti.support.batch.rule.DBUnitRule;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,7 +11,9 @@ import org.junit.rules.TemporaryFolder;
 import org.springframework.batch.core.launch.support.CommandLineJobRunner;
 import org.springframework.batch.core.launch.support.ExitCodeMapper;
 
-public class CommandLineJobRunnerTI {
+import javax.inject.Inject;
+
+public class JobExtractionTI {
 
     @ClassRule
     public final static TemporaryFolder outputFile = new TemporaryFolder();
@@ -23,6 +26,10 @@ public class CommandLineJobRunnerTI {
      */
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+
+    @Rule
+    @Inject
+    public DBUnitRule dbUnitRule;
 
     @Test
     public void run() throws Exception {

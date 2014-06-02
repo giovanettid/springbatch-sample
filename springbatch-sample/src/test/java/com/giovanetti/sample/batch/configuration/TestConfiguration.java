@@ -4,6 +4,7 @@ import com.giovanetti.sample.batch.item.User;
 import com.giovanetti.sample.batch.job.JobExtractionConfiguration;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.giovanetti.support.batch.configuration.GenericTestConfiguration;
+import com.giovanetti.support.batch.rule.DBUnitRule;
 import com.giovanetti.support.batch.template.ItemReaderTemplate;
 import com.giovanetti.support.batch.template.ItemWriterTemplate;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
@@ -19,7 +20,14 @@ import javax.sql.DataSource;
 @Import({JobExtractionConfiguration.class, GenericTestConfiguration.class})
 public class TestConfiguration {
 
-    private final static String[] SQL_SCRIPTS = {"schema-functional.sql", "users.sql"};
+    private final static String FUNCTIONAL_SCRIPT = "schema-functional.sql";
+
+    private final static String XML_DATASET = "users.xml";
+
+    @Bean
+    public DBUnitRule dbUnitRule() {
+        return new DBUnitRule(XML_DATASET);
+    }
 
     @Bean
     ItemReaderTemplate<User> itemReaderTemplate(JdbcCursorItemReader<User> itemReader) {
@@ -34,7 +42,7 @@ public class TestConfiguration {
     @Bean
     DataSourceInitializer functionalDataSourceInitializer(@FunctionalDataSource DataSource functionalDataSource) {
         return GenericTestConfiguration.createDataSourceInitializer(functionalDataSource,
-                GenericTestConfiguration.createDatabasePopulator(SQL_SCRIPTS));
+                GenericTestConfiguration.createDatabasePopulator(FUNCTIONAL_SCRIPT));
     }
 
 }

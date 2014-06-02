@@ -3,14 +3,15 @@ package com.giovanetti.sample.batch.job;
 import com.giovanetti.sample.batch.configuration.TestConfiguration;
 import com.giovanetti.support.batch.ExternalConfiguration;
 import com.giovanetti.support.batch.rule.BatchProperties;
+import com.giovanetti.support.batch.rule.DBUnitRule;
 import com.google.common.collect.Iterables;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.*;
 import org.springframework.batch.test.JobLauncherTestUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,15 +34,16 @@ public class JobExtractionTest {
             .addFunctionalHsql()
             .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL.toString(), "1");
 
+    @Rule
+    @Inject
+    public DBUnitRule dbUnitRule;
+
     @Inject
     private JobLauncherTestUtils jobLauncherTestUtils;
 
-    @Inject
-    private JdbcTemplate jdbcTemplate;
-
     @Test
     public void databaseInitialisationOK() {
-        assertThat(jdbcTemplate.queryForObject("select count(*) from USER", Integer.class)).isEqualTo(2);
+        assertThat(dbUnitRule.rowCountFrom("USER")).isEqualTo(2);
     }
 
     @Test

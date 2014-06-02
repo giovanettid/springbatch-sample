@@ -3,8 +3,10 @@ package com.giovanetti.sample.batch.job;
 import com.giovanetti.sample.batch.configuration.TestConfiguration;
 import com.giovanetti.sample.batch.item.User;
 import com.giovanetti.support.batch.rule.BatchProperties;
+import com.giovanetti.support.batch.rule.DBUnitRule;
 import com.giovanetti.support.batch.template.ItemReaderTemplate;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.DirtiesContext;
@@ -24,6 +26,10 @@ public class JdbcCursorItemReaderTest {
 
     @ClassRule
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
+
+    @Rule
+    @Inject
+    public DBUnitRule dbUnitRule;
 
     @Inject
     private ItemReaderTemplate<User> itemReader;

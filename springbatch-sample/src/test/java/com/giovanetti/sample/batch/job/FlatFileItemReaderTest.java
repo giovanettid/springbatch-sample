@@ -1,9 +1,9 @@
 package com.giovanetti.sample.batch.job;
 
-import com.giovanetti.sample.batch.configuration.TestConfiguration;
+import com.giovanetti.sample.batch.configuration.JobAlimentationTestConfiguration;
 import com.giovanetti.sample.batch.item.User;
 import com.giovanetti.support.batch.rule.BatchProperties;
-import com.giovanetti.support.batch.template.ItemWriterTemplate;
+import com.giovanetti.support.batch.template.ItemReaderTemplate;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -21,46 +21,49 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
 import javax.inject.Inject;
-import java.io.IOException;
 
-import static com.giovanetti.sample.batch.item.ItemHelper.listOf2UsersMapFromDB;
-import static java.nio.file.Files.readAllLines;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+
+import static com.giovanetti.sample.batch.item.ItemHelper.listOf2Users;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
+@ContextConfiguration(classes = {JobAlimentationTestConfiguration.class})
 @TestExecutionListeners(
         {DependencyInjectionTestExecutionListener.class, StepScopeTestExecutionListener.class, DirtiesContextTestExecutionListener.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class FlatFileWriterTest {
+public class FlatFileItemReaderTest {
 
-    public static StepExecution getStepExecution() {
+    public static StepExecution getStepExecution() throws IOException {
+        inputFile = inputRule.newFile();
         return MetaDataInstanceFactory.createStepExecution(
-                new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
-                        outputFile.getRoot().getPath()).toJobParameters()
-        );
+                new JobParametersBuilder().addString(JobAlimentationConfiguration.INPUT_FILE_PARAMETER,
+                        inputFile.getPath()).toJobParameters());
     }
 
+    private static File inputFile;
+
     @ClassRule
-    public final static TemporaryFolder outputFile = new TemporaryFolder();
+    public final static TemporaryFolder inputRule = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
 
     @Inject
-    private ItemWriterTemplate<User> itemWriter;
+    private ItemReaderTemplate<User> itemReader;
 
     @Test
-    public void write() throws IOException {
+    public void read() throws IOException {
 
-        // Act
-        itemWriter.write(listOf2UsersMapFromDB());
+        Files.write(inputFile.toPath(), Arrays.asList("1,prenom1,nom1", "2,prenom2,nom2"));
 
-        // Assert
-        assertThat(readAllLines(outputFile.getRoot().toPath()))
+        assertThat(itemReader.readAll())
                 .hasSize(2)
-                .contains("1,prenom1,nom1", "2,prenom2,nom2");
-
+                .usingFieldByFieldElementComparator()
+                .containsAll(listOf2Users());
     }
 
 }

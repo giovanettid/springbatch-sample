@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ItemHelper {
 
-    public static List<User> listOf2UsersMapFromDB() {
+    public static List<User> listOf2Users() {
         User user1 = new User();
         user1.setId("1");
         user1.setPrenom("prenom1");

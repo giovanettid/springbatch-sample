@@ -1,14 +1,11 @@
 package com.giovanetti.sample.batch.configuration;
 
 import com.giovanetti.sample.batch.item.User;
-import com.giovanetti.sample.batch.job.JobExtractionConfiguration;
+import com.giovanetti.sample.batch.job.JobAlimentationConfiguration;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.giovanetti.support.batch.configuration.GenericTestConfiguration;
-import com.giovanetti.support.batch.rule.DBUnitRule;
 import com.giovanetti.support.batch.template.ItemReaderTemplate;
-import com.giovanetti.support.batch.template.ItemWriterTemplate;
-import org.springframework.batch.item.database.JdbcCursorItemReader;
-import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -17,26 +14,14 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import javax.sql.DataSource;
 
 @Configuration
-@Import({JobExtractionConfiguration.class, GenericTestConfiguration.class})
-public class TestConfiguration {
+@Import({JobAlimentationConfiguration.class, GenericTestConfiguration.class})
+public class JobAlimentationTestConfiguration {
 
     private final static String FUNCTIONAL_SCRIPT = "schema-functional.sql";
 
-    private final static String XML_DATASET = "users.xml";
-
     @Bean
-    public DBUnitRule dbUnitRule() {
-        return new DBUnitRule(XML_DATASET);
-    }
-
-    @Bean
-    ItemReaderTemplate<User> itemReaderTemplate(JdbcCursorItemReader<User> itemReader) {
+    ItemReaderTemplate<User> itemReaderTemplate(FlatFileItemReader<User> itemReader) {
         return new ItemReaderTemplate<>(itemReader);
-    }
-
-    @Bean
-    ItemWriterTemplate<User> itemWriterTemplate(FlatFileItemWriter<User> itemWriter) {
-        return new ItemWriterTemplate<>(itemWriter);
     }
 
     @Bean

@@ -5,6 +5,7 @@ import com.giovanetti.support.batch.CustomBatchConfigurer;
 import com.giovanetti.support.batch.ExternalConfiguration;
 import com.giovanetti.support.batch.annotations.CommitInterval;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
+import com.giovanetti.support.batch.function.Consumer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.Step;
@@ -75,29 +76,32 @@ public class JobExtractionConfiguration {
 
     @Bean
     JdbcCursorItemReader<User> reader() {
-        ParameterizedBeanPropertyRowMapper<User> rowMapper = ParameterizedBeanPropertyRowMapper.newInstance(User.class);
+        ParameterizedBeanPropertyRowMapper<User> mapper = ParameterizedBeanPropertyRowMapper.newInstance(User.class);
 
-        JdbcCursorItemReader<User> jdbcCursorItemReader = new JdbcCursorItemReader<>();
-        jdbcCursorItemReader.setDataSource(dataSource);
-        jdbcCursorItemReader.setSql("select ID,PRENOM,NOM from USER");
-        jdbcCursorItemReader.setRowMapper(rowMapper);
-        return jdbcCursorItemReader;
+        JdbcCursorItemReader<User> reader = new JdbcCursorItemReader<>();
+        reader.setDataSource(dataSource);
+        reader.setSql("select ID,PRENOM,NOM from USER");
+        reader.setRowMapper(mapper);
+        Consumer.acceptWithRawException(reader, JdbcCursorItemReader::afterPropertiesSet);
+        return reader;
     }
 
     @Bean
     @StepScope
     FlatFileItemWriter<User> writer(@Value("#{jobParameters['" + OUTPUT_FILE_PARAMETER + "']}") String path) {
-        BeanWrapperFieldExtractor<User> fieldExtractor = new BeanWrapperFieldExtractor<>();
-        fieldExtractor.setNames(new String[]{"id", "prenom", "nom"});
+        BeanWrapperFieldExtractor<User> extractor = new BeanWrapperFieldExtractor<>();
+        extractor.setNames(new String[]{"id", "prenom", "nom"});
+        extractor.afterPropertiesSet();
 
-        DelimitedLineAggregator<User> lineAggregator = new DelimitedLineAggregator<>();
-        lineAggregator.setDelimiter(",");
-        lineAggregator.setFieldExtractor(fieldExtractor);
+        DelimitedLineAggregator<User> aggregator = new DelimitedLineAggregator<>();
+        aggregator.setDelimiter(",");
+        aggregator.setFieldExtractor(extractor);
 
-        FlatFileItemWriter<User> flatFileItemWriter = new FlatFileItemWriter<>();
-        flatFileItemWriter.setResource(new FileSystemResource(path));
-        flatFileItemWriter.setLineAggregator(lineAggregator);
-        return flatFileItemWriter;
+        FlatFileItemWriter<User> writer = new FlatFileItemWriter<>();
+        writer.setResource(new FileSystemResource(path));
+        writer.setLineAggregator(aggregator);
+        Consumer.acceptWithRawException(writer, FlatFileItemWriter::afterPropertiesSet);
+        return writer;
     }
 
 }

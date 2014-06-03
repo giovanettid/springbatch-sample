@@ -1,8 +1,7 @@
 package com.giovanetti.sample.batch.job;
 
-import com.giovanetti.sample.batch.configuration.JobExtractionTestConfiguration;
+import com.giovanetti.sample.batch.configuration.JobAlimentationTestConfiguration;
 import com.giovanetti.support.batch.rule.BatchProperties;
-import com.giovanetti.support.batch.rule.DBUnitRule;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,12 +10,10 @@ import org.junit.rules.TemporaryFolder;
 import org.springframework.batch.core.launch.support.CommandLineJobRunner;
 import org.springframework.batch.core.launch.support.ExitCodeMapper;
 
-import javax.inject.Inject;
-
-public class JobExtractionTI {
+public class JobAlimentationTI {
 
     @ClassRule
-    public final static TemporaryFolder outputRule = new TemporaryFolder();
+    public final static TemporaryFolder inputRule = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
@@ -27,17 +24,13 @@ public class JobExtractionTI {
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
-    @Rule
-    @Inject
-    public DBUnitRule dbUnitRule;
-
     @Test
     public void run() throws Exception {
 
         exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_COMPLETED);
 
         CommandLineJobRunner.main(
-                new String[]{JobExtractionTestConfiguration.class.getName(), JobExtractionConfiguration.JOB_NAME.toString(), JobExtractionConfiguration.OUTPUT_FILE_PARAMETER + "=" + outputRule
+                new String[]{JobAlimentationTestConfiguration.class.getName(), JobAlimentationConfiguration.JOB_NAME.toString(), JobAlimentationConfiguration.INPUT_FILE_PARAMETER + "=" + inputRule
                         .newFile()
                         .getPath()});
 
@@ -49,7 +42,7 @@ public class JobExtractionTI {
         exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_GENERIC_ERROR);
 
         CommandLineJobRunner.main(
-                new String[]{JobExtractionTestConfiguration.class.getName(), JobExtractionConfiguration.JOB_NAME.toString()});
+                new String[]{JobAlimentationTestConfiguration.class.getName(), JobAlimentationConfiguration.JOB_NAME.toString()});
 
     }
 }

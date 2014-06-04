@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JobExtractionTestConfiguration.class})
+@ContextConfiguration(classes = {JobExtractionTestConfiguration.class, JobLauncherTestUtils.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class JobExtractionTest {
 
@@ -52,8 +52,7 @@ public class JobExtractionTest {
         // Act
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(
                 new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
-                        outputFile.getRoot().getPath()).toJobParameters()
-        );
+                        outputFile.getRoot().getPath()).toJobParameters());
 
         // Assert
         assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);

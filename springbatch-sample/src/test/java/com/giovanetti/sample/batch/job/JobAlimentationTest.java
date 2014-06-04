@@ -25,7 +25,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JobAlimentationTestConfiguration.class})
+@ContextConfiguration(classes = {JobAlimentationTestConfiguration.class, JobLauncherTestUtils.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class JobAlimentationTest {
 

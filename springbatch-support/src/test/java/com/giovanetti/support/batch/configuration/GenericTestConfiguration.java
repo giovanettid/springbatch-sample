@@ -2,7 +2,6 @@ package com.giovanetti.support.batch.configuration;
 
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.giovanetti.support.batch.annotations.TechnicalDataSource;
-import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -17,11 +16,6 @@ public class GenericTestConfiguration {
 
     private final static String[] HSQL_SCRIPTS = new String[]{"org/springframework/batch/core/schema-drop-hsqldb.sql",
             "org/springframework/batch/core/schema-hsqldb.sql"};
-
-    @Bean
-    public JobLauncherTestUtils jobLauncherTestUtils() {
-        return new JobLauncherTestUtils();
-    }
 
     @Bean
     public JdbcTemplate jdbcTemplate(
@@ -45,7 +39,6 @@ public class GenericTestConfiguration {
             databasePopulator.addScript(new ClassPathResource(path));
         }
         return databasePopulator;
-
     }
 
     public static DataSourceInitializer createDataSourceInitializer(
@@ -56,6 +49,5 @@ public class GenericTestConfiguration {
         dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
         return dataSourceInitializer;
     }
-
 
 }

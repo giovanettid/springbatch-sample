@@ -42,11 +42,6 @@ public class JobExtractionTest {
     private JobLauncherTestUtils jobLauncherTestUtils;
 
     @Test
-    public void databaseInitialisationOK() {
-        assertThat(dbUnitRule.rowCountFrom("USER")).isEqualTo(2);
-    }
-
-    @Test
     public void jobExtraction() throws Exception {
 
         // Act

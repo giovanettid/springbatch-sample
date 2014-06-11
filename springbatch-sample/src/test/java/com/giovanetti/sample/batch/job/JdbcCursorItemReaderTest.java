@@ -35,6 +35,11 @@ public class JdbcCursorItemReaderTest {
     private ItemReaderTemplate<User> itemReader;
 
     @Test
+    public void databaseInitialisationOK() {
+        assertThat(dbUnitRule.rowCountFrom("USER")).isEqualTo(2);
+    }
+
+    @Test
     public void read() {
 
         assertThat(itemReader.readAll())

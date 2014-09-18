@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FlatFileItemWriterTest {
 
     public static StepExecution getStepExecution() throws IOException {
-        outputFile = outputRule.newFile();
+        outputFile = temporaryFolder.newFile();
         return MetaDataInstanceFactory.createStepExecution(
                 new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
                         outputFile.getPath()).toJobParameters());
@@ -45,7 +45,7 @@ public class FlatFileItemWriterTest {
     private static File outputFile;
 
     @ClassRule
-    public final static TemporaryFolder outputRule = new TemporaryFolder();
+    public final static TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = BatchProperties.getDefault();

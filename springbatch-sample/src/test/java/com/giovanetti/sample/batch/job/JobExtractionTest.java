@@ -26,13 +26,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class JobExtractionTest {
 
-    @ClassRule
-    public final static TemporaryFolder outputFile = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = new BatchProperties().addTechnicalHsql()
             .addFunctionalHsql()
             .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL.toString(), "1");
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
     @Inject
@@ -47,7 +48,7 @@ public class JobExtractionTest {
         // Act
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(
                 new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
-                        outputFile.getRoot().getPath()).toJobParameters());
+                        temporaryFolder.getRoot().getPath()).toJobParameters());
 
         // Assert
         assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);

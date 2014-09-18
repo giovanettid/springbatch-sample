@@ -12,11 +12,12 @@ import org.springframework.batch.core.launch.support.ExitCodeMapper;
 
 public class JobAlimentationTI {
 
-    @ClassRule
-    public final static TemporaryFolder inputRule = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     /**
      * @see <a href="http://www.stefan-birkner.de/system-rules/index.html">System Rules</a>
@@ -30,7 +31,7 @@ public class JobAlimentationTI {
         exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_COMPLETED);
 
         CommandLineJobRunner.main(
-                new String[]{JobAlimentationTestConfiguration.class.getName(), JobAlimentationConfiguration.JOB_NAME.toString(), JobAlimentationConfiguration.INPUT_FILE_PARAMETER + "=" + inputRule
+                new String[]{JobAlimentationTestConfiguration.class.getName(), JobAlimentationConfiguration.JOB_NAME.toString(), JobAlimentationConfiguration.INPUT_FILE_PARAMETER + "=" + temporaryFolder
                         .newFile()
                         .getPath()});
 

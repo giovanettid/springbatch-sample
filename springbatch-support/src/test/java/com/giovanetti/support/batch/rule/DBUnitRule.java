@@ -37,18 +37,26 @@ public class DBUnitRule extends ExternalResource {
 
     @Override
     protected void before() {
-        executeDBUnitOperation(DatabaseOperation.TRANSACTION(DatabaseOperation.INSERT));
-        LOG.info("execute insert operation with {} dataSet", dataSetResource);
+        executeInsertOperation();
     }
 
     @Override
     protected void after() {
-        executeDBUnitOperation(DatabaseOperation.TRANSACTION(DatabaseOperation.DELETE));
-        LOG.info("execute delete operation with {} dataSet", dataSetResource);
+        executeDeleteOperation();
     }
 
     public int rowCountFrom(String tableName) {
         return jdbcTemplate.queryForObject("select count(*) from "+tableName, Integer.class);
+    }
+
+    public void executeInsertOperation() {
+        executeDBUnitOperation(DatabaseOperation.TRANSACTION(DatabaseOperation.INSERT));
+        LOG.info("execute insert operation with {} dataSet", dataSetResource);
+    }
+
+    public void executeDeleteOperation() {
+        executeDBUnitOperation(DatabaseOperation.TRANSACTION(DatabaseOperation.DELETE));
+        LOG.info("execute delete operation with {} dataSet", dataSetResource);
     }
 
     private void executeDBUnitOperation(final DatabaseOperation databaseOperation) {

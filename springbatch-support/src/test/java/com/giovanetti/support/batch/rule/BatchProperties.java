@@ -30,12 +30,25 @@ public class BatchProperties extends TemporaryFolder {
     }
 
     @Override
-    protected void before() throws Throwable {
-        super.before();
-        batchPropertiesFile = newFile();
+    protected void before() {
+        create();
+    }
+
+    @Override
+    public void create() {
+        try {
+            super.create();
+            batchPropertiesFile = newFile();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
         flush();
         pathSystemProperty.set(batchPropertiesFile.getPath());
-        pathSystemProperty.before();
+        try {
+            pathSystemProperty.before();
+        } catch (Throwable throwable) {
+            throw new IllegalStateException(throwable);
+        }
     }
 
     public BatchProperties addFunctionalHsql() {

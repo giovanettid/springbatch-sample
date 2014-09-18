@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FlatFileItemReaderTest {
 
     public static StepExecution getStepExecution() throws IOException {
-        inputFile = inputRule.newFile();
+        inputFile = temporaryFolder.newFile();
         return MetaDataInstanceFactory.createStepExecution(
                 new JobParametersBuilder().addString(JobAlimentationConfiguration.INPUT_FILE_PARAMETER,
                         inputFile.getPath()).toJobParameters());
@@ -47,7 +47,7 @@ public class FlatFileItemReaderTest {
     private static File inputFile;
 
     @ClassRule
-    public final static TemporaryFolder inputRule = new TemporaryFolder();
+    public final static TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = BatchProperties.getDefault();

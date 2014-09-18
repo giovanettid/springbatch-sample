@@ -5,6 +5,7 @@ import com.giovanetti.support.batch.ExternalConfiguration;
 import com.giovanetti.support.batch.rule.BatchProperties;
 import com.google.common.collect.Iterables;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -29,13 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class JobAlimentationTest {
 
-    @ClassRule
-    public final static TemporaryFolder inputRule = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = new BatchProperties().addTechnicalHsql()
             .addFunctionalHsql()
             .add(ExternalConfiguration.StepPropertyKeys.COMMIT_INTERVAL.toString(), "1");
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Inject
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -47,7 +49,7 @@ public class JobAlimentationTest {
     public void jobAlimentation() throws Exception {
 
         // Arrange
-        File inputFile = inputRule.newFile();
+        File inputFile = temporaryFolder.newFile();
         Files.write(inputFile.toPath(), Arrays.asList("1,prenom1,nom1", "2,prenom2,nom2"));
 
         // Act

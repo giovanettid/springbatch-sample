@@ -15,11 +15,12 @@ import javax.inject.Inject;
 
 public class JobExtractionTI {
 
-    @ClassRule
-    public final static TemporaryFolder outputRule = new TemporaryFolder();
 
     @ClassRule
     public final static BatchProperties batchProperties = BatchProperties.getDefault();
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     /**
      * @see <a href="http://www.stefan-birkner.de/system-rules/index.html">System Rules</a>
@@ -37,7 +38,7 @@ public class JobExtractionTI {
         exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_COMPLETED);
 
         CommandLineJobRunner.main(
-                new String[]{JobExtractionTestConfiguration.class.getName(), JobExtractionConfiguration.JOB_NAME.toString(), JobExtractionConfiguration.OUTPUT_FILE_PARAMETER + "=" + outputRule
+                new String[]{JobExtractionTestConfiguration.class.getName(), JobExtractionConfiguration.JOB_NAME.toString(), JobExtractionConfiguration.OUTPUT_FILE_PARAMETER + "=" + temporaryFolder
                         .newFile()
                         .getPath()});
 

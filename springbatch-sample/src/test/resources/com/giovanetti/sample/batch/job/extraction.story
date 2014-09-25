@@ -1,9 +1,3 @@
-Meta:
-
-Narrative:
-As a user
-I want to perform an action
-So that I can achieve a business goal
 
 Scenario: scenario 1
 Given les utilisateurs
@@ -16,7 +10,6 @@ Then mon fichier de sortie contient les lignes
 1,prenom1,nom1
 2,prenom2,nom2
 
-
 Scenario: scenario 2
 Given les utilisateurs
 |Id|Nom|Prenom|
@@ -25,3 +18,4 @@ When je charge les utilisateurs en base de données
 And j'execute le job d'extraction
 Then mon fichier de sortie contient les lignes
 1,prenom1,nom1
+

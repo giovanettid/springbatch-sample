@@ -10,7 +10,6 @@ import com.ninja_squad.dbsetup.operation.Insert;
 import org.apache.commons.io.FileUtils;
 import org.jbehave.core.annotations.*;
 import org.jbehave.core.model.ExamplesTable;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.test.JobLauncherTestUtils;
 

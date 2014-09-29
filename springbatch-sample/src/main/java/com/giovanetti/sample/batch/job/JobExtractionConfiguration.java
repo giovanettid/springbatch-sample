@@ -37,7 +37,7 @@ public class JobExtractionConfiguration {
     final static String JOB_NAME = "extractionJob";
     private final static String STEP_NAME = "jdbcToFileStep";
 
-    final static String OUTPUT_FILE_PARAMETER = "output.file.path";
+    public final static String OUTPUT_FILE_PARAMETER = "output.file.path";
     private static final String PATH_OVERRIDE_BY_LATE_BINDING = null;
 
     @Inject

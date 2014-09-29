@@ -1,7 +1,7 @@
 
 Scenario: scenario 1
 Given les utilisateurs
-|Id|Nom|Prenom|
+|id|nom|prenom|
 |1|nom1|prenom1|
 |2|nom2|prenom2|
 When je charge les utilisateurs en base de données
@@ -12,7 +12,7 @@ Then mon fichier de sortie contient les lignes
 
 Scenario: scenario 2
 Given les utilisateurs
-|Id|Nom|Prenom|
+|id|nom|prenom|
 |1|nom1|prenom1|
 When je charge les utilisateurs en base de données
 And j'execute le job d'extraction

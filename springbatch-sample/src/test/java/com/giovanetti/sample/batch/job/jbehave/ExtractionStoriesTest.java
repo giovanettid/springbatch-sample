@@ -1,4 +1,4 @@
-package com.giovanetti.sample.batch.job;
+package com.giovanetti.sample.batch.job.jbehave;
 
 
 import com.giovanetti.sample.batch.configuration.JobExtractionTestConfiguration;
@@ -58,7 +58,7 @@ public class ExtractionStoriesTest extends JUnitStories {
     @Override
     protected List<String> storyPaths() {
         URL searchInURL = CodeLocations.codeLocationFromClass(this.getClass());
-        return new StoryFinder().findPaths(searchInURL, "**/extraction*.story", "");
+        return new StoryFinder().findPaths(searchInURL, "**/jbehave/extraction*.story", "");
     }
 
     @Override

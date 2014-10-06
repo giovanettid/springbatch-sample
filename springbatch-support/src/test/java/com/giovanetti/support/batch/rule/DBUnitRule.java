@@ -49,12 +49,12 @@ public class DBUnitRule extends ExternalResource {
         return jdbcTemplate.queryForObject("select count(*) from "+tableName, Integer.class);
     }
 
-    public void executeInsertOperation() {
+    void executeInsertOperation() {
         executeDBUnitOperation(DatabaseOperation.TRANSACTION(DatabaseOperation.INSERT));
         LOG.info("execute insert operation with {} dataSet", dataSetResource);
     }
 
-    public void executeDeleteOperation() {
+    void executeDeleteOperation() {
         executeDBUnitOperation(DatabaseOperation.TRANSACTION(DatabaseOperation.DELETE));
         LOG.info("execute delete operation with {} dataSet", dataSetResource);
     }

@@ -7,8 +7,8 @@ Feature: batch extraction+
     When je charge les utilisateurs en base de données
     And j'execute le job d'extraction
     Then mon fichier de sortie contient les lignes
-  |1,prenom1,nom1|
-  |2,prenom2,nom2|
+      |1,prenom1,nom1|
+      |2,prenom2,nom2|
 
   Scenario: scenario 2
     Given les utilisateurs
@@ -17,5 +17,4 @@ Feature: batch extraction+
     When je charge les utilisateurs en base de données
     And j'execute le job d'extraction
     Then mon fichier de sortie contient les lignes
-  |1,prenom1,nom1|
-
+      |1,prenom1,nom1|

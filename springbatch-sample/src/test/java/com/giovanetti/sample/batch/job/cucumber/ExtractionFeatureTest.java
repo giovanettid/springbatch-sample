@@ -7,7 +7,8 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = "pretty",glue = "com.giovanetti.sample.batch.job.cucumber")
+@CucumberOptions(format = {"pretty", "html:target/cucumber-report"},
+        glue = "com.giovanetti.sample.batch.job.cucumber")
 public class ExtractionFeatureTest {
 
     @BeforeClass

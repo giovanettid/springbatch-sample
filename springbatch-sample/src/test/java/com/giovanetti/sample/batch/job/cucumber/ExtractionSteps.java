@@ -7,13 +7,10 @@ import com.giovanetti.sample.batch.job.JobExtractionConfiguration;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
-import com.ninja_squad.dbsetup.operation.DeleteAll;
 import com.ninja_squad.dbsetup.operation.Insert;
 import cucumber.api.DataTable;
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -30,7 +27,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import static com.ninja_squad.dbsetup.Operations.deleteAllFrom;
 import static com.ninja_squad.dbsetup.Operations.insertInto;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,10 +34,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ExtractionSteps {
 
-    public static final String USER_TABLE = "USER";
-    public static final String[] USER_COLUMNS = new String[]{"ID", "NOM", "PRENOM"};
-
-    public static final DeleteAll DELETE_ALL_USER = deleteAllFrom(USER_TABLE);
+    private static final String USER_TABLE = "USER";
+    private static final String[] USER_COLUMNS = new String[]{"ID", "NOM", "PRENOM"};
 
     private File outputFile;
 
@@ -59,20 +53,17 @@ public class ExtractionSteps {
     private List<User> users;
 
     @Before
-    public void setupDB() {
-        new DbSetup(destination, DELETE_ALL_USER).launch();
-    }
-
-    @Before
     public void createOutputFile() throws IOException {
         outputFile = createTempFile();
     }
 
     private File createTempFile() throws IOException {
         File tempFolder = File.createTempFile("junit", "");
-        tempFolder.delete();
-        tempFolder.mkdir();
-        return File.createTempFile("junit", null, tempFolder);
+        if (tempFolder.delete() && tempFolder.mkdir()) {
+            return File.createTempFile("junit", null, tempFolder);
+        } else {
+            throw new IllegalStateException("createTempFile fail");
+        }
     }
 
     @After

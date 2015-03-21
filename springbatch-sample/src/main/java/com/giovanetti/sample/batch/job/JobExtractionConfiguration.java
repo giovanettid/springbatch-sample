@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -55,13 +55,13 @@ public class JobExtractionConfiguration {
     private Integer commitInterval;
 
     @Bean
-    JobParametersValidator jobParametersValidator() {
+    JobParametersValidator jobExtractionParametersValidator() {
         return new DefaultJobParametersValidator(new String[]{OUTPUT_FILE_PARAMETER}, new String[]{});
     }
 
     @Bean(name = JOB_NAME)
     Job job() {
-        return jobBuilders.get(JOB_NAME).validator(jobParametersValidator()).start(step()).build();
+        return jobBuilders.get(JOB_NAME).validator(jobExtractionParametersValidator()).start(step()).build();
     }
 
     @Bean(name = STEP_NAME)
@@ -69,14 +69,14 @@ public class JobExtractionConfiguration {
         return stepBuilders.get(STEP_NAME)
                 .transactionManager(new ResourcelessTransactionManager())
                 .<User, User>chunk(commitInterval)
-                .reader(reader())
-                .writer(writer(PATH_OVERRIDE_BY_LATE_BINDING))
+                .reader(jdbcReader())
+                .writer(fileWriter(PATH_OVERRIDE_BY_LATE_BINDING))
                 .build();
     }
 
     @Bean
-    JdbcCursorItemReader<User> reader() {
-        ParameterizedBeanPropertyRowMapper<User> mapper = ParameterizedBeanPropertyRowMapper.newInstance(User.class);
+    JdbcCursorItemReader<User> jdbcReader() {
+        BeanPropertyRowMapper<User> mapper = BeanPropertyRowMapper.newInstance(User.class);
 
         JdbcCursorItemReader<User> reader = new JdbcCursorItemReader<>();
         reader.setDataSource(dataSource);
@@ -88,7 +88,7 @@ public class JobExtractionConfiguration {
 
     @Bean
     @StepScope
-    FlatFileItemWriter<User> writer(@Value("#{jobParameters['" + OUTPUT_FILE_PARAMETER + "']}") String path) {
+    FlatFileItemWriter<User> fileWriter(@Value("#{jobParameters['" + OUTPUT_FILE_PARAMETER + "']}") String path) {
         BeanWrapperFieldExtractor<User> extractor = new BeanWrapperFieldExtractor<>();
         extractor.setNames(new String[]{"id", "prenom", "nom"});
         extractor.afterPropertiesSet();

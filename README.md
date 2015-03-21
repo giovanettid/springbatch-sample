@@ -9,3 +9,5 @@ Concernant les tests de springbatch-sample :
 
 * les commodités du module springbatch-support et les librairies dédiées aux tests en dépendances permettent d'obtenir un code de test le plus concis possible.
 * l'approche TDD est possible pour ajouter de nouveaux exemples de job.
+
+spring boot est utilisé pour packager un jar executable

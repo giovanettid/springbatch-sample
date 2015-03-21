@@ -56,13 +56,13 @@ public class JobAlimentationConfiguration {
     private Integer commitInterval;
 
     @Bean
-    JobParametersValidator jobParametersValidator() {
+    JobParametersValidator jobAlimentationParametersValidator() {
         return new DefaultJobParametersValidator(new String[]{INPUT_FILE_PARAMETER}, new String[]{});
     }
 
     @Bean(name = JOB_NAME)
     Job job() {
-        return jobBuilders.get(JOB_NAME).validator(jobParametersValidator()).start(step()).build();
+        return jobBuilders.get(JOB_NAME).validator(jobAlimentationParametersValidator()).start(step()).build();
     }
 
     @Bean(name = STEP_NAME)
@@ -70,14 +70,14 @@ public class JobAlimentationConfiguration {
         return stepBuilders.get(STEP_NAME)
                 .transactionManager(new DataSourceTransactionManager(dataSource))
                 .<User, User>chunk(commitInterval)
-                .reader(reader(PATH_OVERRIDE_BY_LATE_BINDING))
-                .writer(writer())
+                .reader(fileReader(PATH_OVERRIDE_BY_LATE_BINDING))
+                .writer(jdbcWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    FlatFileItemReader<User> reader(@Value("#{jobParameters['" + INPUT_FILE_PARAMETER + "']}") String path) {
+    FlatFileItemReader<User> fileReader(@Value("#{jobParameters['" + INPUT_FILE_PARAMETER + "']}") String path) {
         DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer(",");
         tokenizer.setNames(new String[]{"id", "prenom", "nom"});
 
@@ -98,7 +98,7 @@ public class JobAlimentationConfiguration {
     }
 
     @Bean
-    JdbcBatchItemWriter<User> writer() {
+    JdbcBatchItemWriter<User> jdbcWriter() {
         JdbcBatchItemWriter<User> writer = new JdbcBatchItemWriter<>();
         writer.setDataSource(dataSource);
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());

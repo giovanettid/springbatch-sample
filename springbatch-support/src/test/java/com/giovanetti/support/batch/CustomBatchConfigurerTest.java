@@ -1,6 +1,5 @@
 package com.giovanetti.support.batch;
 
-import com.giovanetti.support.batch.CustomBatchConfigurer;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;

@@ -18,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Arrays;
@@ -68,7 +67,7 @@ public class JobAlimentationTest {
     }
 
     @Test(expected = JobParametersInvalidException.class)
-    public void jobExtraction_SiParametreInvalide_AlorsException() throws Exception {
+    public void jobAlimentation_SiParametreInvalide_AlorsException() throws Exception {
         jobLauncherTestUtils.launchJob();
     }
 

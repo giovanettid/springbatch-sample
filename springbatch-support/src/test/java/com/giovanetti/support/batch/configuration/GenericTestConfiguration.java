@@ -1,11 +1,14 @@
 package com.giovanetti.support.batch.configuration;
 
+import com.giovanetti.support.batch.ExternalConfiguration;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.giovanetti.support.batch.annotations.TechnicalDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
@@ -31,6 +34,18 @@ public class GenericTestConfiguration {
                 createDatabasePopulator(
                         HSQL_SCRIPTS)
         );
+    }
+
+    public static void buildFunctionalDataSource(String... scripts) {
+        new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).setName(ExternalConfiguration.DataSourceType.FUNCTIONAL.toString())
+                .addScripts(scripts)
+                .build();
+    }
+
+    public static void buildTechnicalDataSource() {
+        new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).setName(ExternalConfiguration.DataSourceType.TECHNICAL.toString())
+                .addScripts(HSQL_SCRIPTS)
+                .build();
     }
 
     public static ResourceDatabasePopulator createDatabasePopulator(String... paths) {

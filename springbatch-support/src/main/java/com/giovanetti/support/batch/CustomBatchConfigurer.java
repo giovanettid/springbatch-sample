@@ -4,6 +4,7 @@ import com.giovanetti.support.batch.annotations.TechnicalDataSource;
 import com.giovanetti.support.batch.function.Consumer;
 import com.giovanetti.support.batch.function.Function;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
@@ -55,6 +56,12 @@ public class CustomBatchConfigurer implements BatchConfigurer {
         Consumer.acceptWithRawException(jobLauncher, SimpleJobLauncher::afterPropertiesSet);
         return jobLauncher;
     }
+
+    @Override
+    public JobExplorer getJobExplorer() {
+        return null;
+    }
+
 
 }
 

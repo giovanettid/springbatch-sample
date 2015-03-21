@@ -21,7 +21,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
 import javax.inject.Inject;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

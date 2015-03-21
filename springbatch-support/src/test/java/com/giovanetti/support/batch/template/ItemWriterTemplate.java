@@ -1,6 +1,7 @@
 package com.giovanetti.support.batch.template;
 
-import org.springframework.batch.item.*;
+import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.item.ItemStreamWriter;
 
 import java.util.List;
 

@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.test.StepScopeTestExecutionListener;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -47,7 +47,7 @@ public class JdbcBatchItemWriterTest {
 
         // Assert
         assertThat(jdbcTemplate.query("select id,prenom,nom from USER",
-                ParameterizedBeanPropertyRowMapper.newInstance(User.class)))
+                BeanPropertyRowMapper.newInstance(User.class)))
                 .hasSize(2)
                 .usingFieldByFieldElementComparator()
                 .containsAll(listOf2Users());

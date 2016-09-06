@@ -1,4 +1,9 @@
 language: java
 jdk:
   - oraclejdk8
-script:  mvn clean test
+
+services:
+  - docker
+
+script:
+  - mvn clean test failsafe:integration-test

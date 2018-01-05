@@ -1,4 +1,4 @@
-FROM java:8
+FROM java:9
 
 COPY maven/springbatch-sample*.jar /springbatch-sample.jar
 

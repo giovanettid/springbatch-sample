@@ -21,6 +21,7 @@
     <url>http://maven.apache.org</url>
 
     <properties>
+        <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -111,17 +112,19 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
+                    <forkCount>0</forkCount>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.21.0</version>
+                <version>2.22.1</version>
+                <configuration>
+                    <forkCount>0</forkCount>
+                </configuration>
             </plugin>
         </plugins>
     </build>

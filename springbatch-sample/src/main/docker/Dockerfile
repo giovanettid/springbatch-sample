@@ -1,4 +1,4 @@
-FROM java:9
+FROM openjdk:11-jre-slim
 
 COPY maven/springbatch-sample*.jar /springbatch-sample.jar
 

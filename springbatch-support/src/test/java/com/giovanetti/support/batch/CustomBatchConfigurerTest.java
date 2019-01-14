@@ -1,7 +1,7 @@
 package com.giovanetti.support.batch;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.support.SimpleJobRepository;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -14,7 +14,7 @@ public class CustomBatchConfigurerTest {
 
     private CustomBatchConfigurer customBatchConfigurer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         customBatchConfigurer = new CustomBatchConfigurer();
         customBatchConfigurer.dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).build();

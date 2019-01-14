@@ -2,7 +2,7 @@ package com.giovanetti.sample.batch.job.jbehave;
 
 
 import com.giovanetti.sample.batch.configuration.JobExtractionTestConfiguration;
-import com.giovanetti.support.batch.rule.BatchProperties;
+import com.giovanetti.support.batch.extension.BatchProperties;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;

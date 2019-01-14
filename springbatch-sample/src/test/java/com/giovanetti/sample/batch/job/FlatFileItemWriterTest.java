@@ -2,12 +2,14 @@ package com.giovanetti.sample.batch.job;
 
 import com.giovanetti.sample.batch.configuration.JobExtractionTestConfiguration;
 import com.giovanetti.sample.batch.item.User;
-import com.giovanetti.support.batch.rule.BatchProperties;
+import com.giovanetti.support.batch.extension.BatchProperties;
 import com.giovanetti.support.batch.template.ItemWriterTemplate;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import io.github.glytching.junit.extension.folder.TemporaryFolder;
+import io.github.glytching.junit.extension.folder.TemporaryFolderExtension;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.test.MetaDataInstanceFactory;
@@ -16,7 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
@@ -28,7 +30,7 @@ import java.nio.file.Files;
 import static com.giovanetti.sample.batch.item.ItemHelper.listOf2Users;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith({SpringExtension.class, TemporaryFolderExtension.class})
 @ContextConfiguration(classes = {JobExtractionTestConfiguration.class})
 @TestExecutionListeners(
         {DependencyInjectionTestExecutionListener.class, StepScopeTestExecutionListener.class, DirtiesContextTestExecutionListener.class})
@@ -36,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FlatFileItemWriterTest {
 
     public static StepExecution getStepExecution() throws IOException {
-        outputFile = temporaryFolder.newFile();
+        outputFile = TEMPORARY_FOLDER.createFile("newFile");
         return MetaDataInstanceFactory.createStepExecution(
                 new JobParametersBuilder().addString(JobExtractionConfiguration.OUTPUT_FILE_PARAMETER,
                         outputFile.getPath()).toJobParameters());
@@ -44,14 +46,18 @@ public class FlatFileItemWriterTest {
 
     private static File outputFile;
 
-    @ClassRule
-    public final static TemporaryFolder temporaryFolder = new TemporaryFolder();
+    private static TemporaryFolder TEMPORARY_FOLDER;
 
-    @ClassRule
-    public final static BatchProperties batchProperties = BatchProperties.getDefault();
+    @RegisterExtension
+    public static BatchProperties batchProperties = BatchProperties.getDefault();
 
     @Inject
     private ItemWriterTemplate<User> itemWriter;
+
+    @BeforeAll
+    public static void prepare(TemporaryFolder temporaryFolder) {
+        TEMPORARY_FOLDER = temporaryFolder;
+    }
 
     @Test
     public void write() throws IOException {
@@ -65,5 +71,4 @@ public class FlatFileItemWriterTest {
                 .contains("1,prenom1,nom1", "2,prenom2,nom2");
 
     }
-
 }

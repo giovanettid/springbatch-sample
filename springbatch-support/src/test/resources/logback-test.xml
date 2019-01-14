@@ -19,7 +19,7 @@
         <level value="INFO"/>
     </logger>
 
-    <logger name="com.giovanetti.support.batch.rule.DBUnitRule">
+    <logger name="com.giovanetti.support.batch.extension.DBUnitExtension">
         <level value="INFO"/>
     </logger>
 

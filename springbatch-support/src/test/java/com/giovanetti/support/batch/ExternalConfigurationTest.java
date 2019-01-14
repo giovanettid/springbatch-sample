@@ -4,29 +4,29 @@ import com.giovanetti.support.batch.ExternalConfiguration.DataSourcePropertyKeys
 import com.giovanetti.support.batch.ExternalConfiguration.DataSourceType;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.giovanetti.support.batch.annotations.TechnicalDataSource;
-import com.giovanetti.support.batch.rule.BatchProperties;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.giovanetti.support.batch.extension.BatchProperties;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {ExternalConfiguration.class})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ExternalConfigurationTest {
 
-    @ClassRule
-    public final static BatchProperties batchProperties = BatchProperties.getDefault();
+    @RegisterExtension
+    public static BatchProperties batchProperties = BatchProperties.getDefault();
 
     @Inject
     private Environment environment;

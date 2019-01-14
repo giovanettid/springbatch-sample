@@ -1,10 +1,12 @@
-package com.giovanetti.support.batch.rule;
+package com.giovanetti.support.batch.extension;
 
 import com.giovanetti.support.batch.ExternalConfiguration;
 import com.giovanetti.support.batch.ExternalConfiguration.DataSourcePropertyKeys;
 import com.giovanetti.support.batch.ExternalConfiguration.DataSourceType;
 import org.apache.commons.io.FileUtils;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Rule Junit pour fournir un fichier de propriétés temporaire pendant les tests.
+ * Extension Junit pour fournir un fichier de propriétés temporaire pendant les tests.
  */
-public class BatchProperties extends TemporaryFolder {
-
-    private final BatchPropertiesPathSystemProperty pathSystemProperty = new BatchPropertiesPathSystemProperty();
+public class BatchProperties implements BeforeAllCallback, AfterAllCallback {
 
     private File batchPropertiesFile;
 
@@ -30,25 +30,34 @@ public class BatchProperties extends TemporaryFolder {
     }
 
     @Override
-    protected void before() {
+    public void beforeAll(ExtensionContext extensionContext) {
         create();
     }
 
     @Override
+    public void afterAll(ExtensionContext context) {
+        System.clearProperty(ExternalConfiguration.BATCH_PROPERTIES_PATH);
+    }
+
     public void create() {
         try {
-            super.create();
             batchPropertiesFile = newFile();
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
         flush();
-        pathSystemProperty.set(batchPropertiesFile.getPath());
-        try {
-            pathSystemProperty.before();
-        } catch (Throwable throwable) {
-            throw new IllegalStateException(throwable);
-        }
+        System.setProperty(ExternalConfiguration.BATCH_PROPERTIES_PATH, "file:" + batchPropertiesFile.getPath());
+    }
+
+    private File newFile() throws IOException {
+        return File.createTempFile("junit", null, createTemporaryFolder());
+    }
+
+    private File createTemporaryFolder() throws IOException {
+        File createdFolder = File.createTempFile("junit", "");
+        createdFolder.delete();
+        createdFolder.mkdir();
+        return createdFolder;
     }
 
     public BatchProperties addFunctionalHsql() {
@@ -79,5 +88,4 @@ public class BatchProperties extends TemporaryFolder {
             throw new IllegalStateException(e);
         }
     }
-
 }

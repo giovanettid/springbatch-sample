@@ -1,6 +1,6 @@
 package com.giovanetti.sample.batch.job.cucumber;
 
-import com.giovanetti.support.batch.rule.BatchProperties;
+import com.giovanetti.support.batch.extension.BatchProperties;
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 import org.junit.BeforeClass;

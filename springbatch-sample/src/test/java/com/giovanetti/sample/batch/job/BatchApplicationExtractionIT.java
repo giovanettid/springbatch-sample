@@ -1,57 +1,52 @@
 package com.giovanetti.sample.batch.job;
 
+import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
 import com.giovanetti.support.batch.configuration.GenericTestConfiguration;
-import com.giovanetti.support.batch.rule.BatchProperties;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.contrib.java.lang.system.ProvideSystemProperty;
-import org.junit.rules.TemporaryFolder;
+import com.giovanetti.support.batch.extension.BatchProperties;
+import io.github.glytching.junit.extension.folder.TemporaryFolder;
+import io.github.glytching.junit.extension.folder.TemporaryFolderExtension;
+import io.github.glytching.junit.extension.system.SystemProperty;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.batch.core.launch.support.ExitCodeMapper;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@ExtendWith({SpringExtension.class, TemporaryFolderExtension.class})
+@SystemProperty(name = "job.name", value = JobExtractionConfiguration.JOB_NAME)
 public class BatchApplicationExtractionIT {
 
     private final static String FUNCTIONAL_SCRIPT = "schema-functional.sql";
 
-    @ClassRule
-    public final static BatchProperties batchProperties = BatchProperties.getDefault();
+    @RegisterExtension
+    public static BatchProperties batchProperties = BatchProperties.getDefault();
 
-    @ClassRule
-    public static ProvideSystemProperty systemProperty = new ProvideSystemProperty("job.name", JobExtractionConfiguration.JOB_NAME);
+    private TemporaryFolder temporaryFolder;
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    /**
-     * @see <a href="http://www.stefan-birkner.de/system-rules/index.html">System Rules</a>
-     */
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-
-    @Before
-    public void before() {
+    @BeforeEach
+    public void prepare(TemporaryFolder temporaryFolder) {
+        this.temporaryFolder = temporaryFolder;
         GenericTestConfiguration.buildFunctionalDataSource(FUNCTIONAL_SCRIPT);
         GenericTestConfiguration.buildTechnicalDataSource();
     }
 
     @Test
+    @ExpectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_COMPLETED)
     public void run() throws IOException {
-
-        exit.expectSystemExitWithStatus(ExitCodeMapper.JVM_EXITCODE_COMPLETED);
-
         BatchApplication.main(
-                new String[]{JobExtractionConfiguration.OUTPUT_FILE_PARAMETER + "=" + temporaryFolder.newFile()
+                new String[]{JobExtractionConfiguration.OUTPUT_FILE_PARAMETER + "=" + temporaryFolder.createFile("newFile")
                         .getPath()});
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void run_SiParametreInvalide_AlorsExitWithError() {
-        BatchApplication.main(new String[]{});
+        assertThrows(IllegalStateException.class, () -> BatchApplication.main(new String[]{}));
     }
 
 }

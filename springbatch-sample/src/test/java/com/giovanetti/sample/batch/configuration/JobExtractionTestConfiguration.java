@@ -4,7 +4,7 @@ import com.giovanetti.sample.batch.item.User;
 import com.giovanetti.sample.batch.job.JobExtractionConfiguration;
 import com.giovanetti.support.batch.annotations.FunctionalDataSource;
 import com.giovanetti.support.batch.configuration.GenericTestConfiguration;
-import com.giovanetti.support.batch.rule.DBUnitRule;
+import com.giovanetti.support.batch.extension.DBUnitExtension;
 import com.giovanetti.support.batch.template.ItemReaderTemplate;
 import com.giovanetti.support.batch.template.ItemWriterTemplate;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
@@ -25,8 +25,8 @@ public class JobExtractionTestConfiguration {
     private final static String XML_DATASET = "users.xml";
 
     @Bean
-    public DBUnitRule dbUnitRule() {
-        return new DBUnitRule(XML_DATASET);
+    public DBUnitExtension dbUnitRule() {
+        return new DBUnitExtension(XML_DATASET);
     }
 
     @Bean
